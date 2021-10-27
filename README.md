@@ -49,7 +49,7 @@ The application will store Users, each containing a List containing Media entrie
 	  notes: "Aka ヲタクに恋は難しい, or Wotaku ni Koi wa Muzukashii. Girlfriend's been pestering me about watching this one.",
 	  tags: ["anime","Spring 2018","A-1 Pictures"],
 	  dateAdded: 2021-10-26
-    }
+    },
     {
 	  name: "Shoplifters",
 	  type: "Film",

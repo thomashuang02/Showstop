@@ -1,57 +1,72 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
-
-(___TODO__: your project name_)
-
-# Shoppy Shoperson 
+# Showstarter 
 
 ## Overview
 
-(___TODO__: a brief one or two paragraph, high-level description of your project_)
+So showstopper, but showstarter instead.
 
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
+Most of us consume media recreationally, but it seems like the more we consume it, the more that already boundless pool expands. What have I already seen, and what have I dropped? When did I watch it, and what did I think of it? What new (or old) movies or shows look interesting, and how can I keep track of them? 
 
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
+Showstarter aims to be a simple web application that helps its user keep track of the answers to all those questions, helping them develop a collection of their past, present, and future media consumption. Now we can at least document the time we've ~~wasted~~ invested!
+
+Users will be able to create accounts in the system, where their personal records are stored in an entry per piece of media (containing information on that media as well as the user's ratings). Users can login and create, view, manipulate, and delete entries, and (hopefully) search, filter, and sort their list based on various criteria.
 
 
 ## Data Model
 
-(___TODO__: a description of your application's data and their relationships to each other_) 
+The application will store Users, each containing a List containing Media entries. All the data for one user will be encapsulated in a single object.
 
-The application will store Users, Lists and Items
-
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
-
-(___TODO__: sample documents_)
-
-An Example User:
+* each user will have one list (embedded), which can be filtered by various categories (movies, shows, etc), genres (sci-fi, action, drama), and optional tags.
+* each list contains an arbitrary number of media entries (by embedding).
 
 ```javascript
 {
-  username: "shannonshopper",
+  username: "movieaddict420",
+  avatar: // string describing path to image
+  bio: // user's bio
   hash: // a password hash,
-  lists: // an array of references to List documents
+  salt: // salt used when hashing password
+  list: [
+    {
+	  name: "My Name",
+	  type: "TV Series",
+	  genres: ["Action","Crime","Drama","Mystery","Thriller"],
+	  status: "Watching",
+	  rating: 9.5,
+	  episodesCompleted: 6,
+	  episodesTotal: 8,
+	  notes: "Charismatic actresses and actors in awesome fight choreography sequences strung together by a compelling story.",
+	  tags: ["Netflix","2021","Korean","Hee-soon Park","Ahn Bo-Hyun","Han So-hee"],
+	  dateAdded: 2021-10-26
+    },
+    {
+	  name: "Wotakoi: Love is Hard for Otaku",
+	  type: "TV Series",
+	  genres: ["Comedy","Romance","Slice of Life"],
+	  status: "Plan to Watch",
+	  rating: null,
+	  episodesCompleted: 0,
+	  episodesTotal: 11,
+	  notes: "Aka ヲタクに恋は難しい, or Wotaku ni Koi wa Muzukashii. Girlfriend's been pestering me about watching this one.",
+	  tags: ["anime","Spring 2018","A-1 Pictures"],
+	  dateAdded: 2021-10-26
+    }
+    {
+	  name: "Shoplifters",
+	  type: "Film",
+	  genres: ["Crime","Drama"],
+	  status: "Completed",
+	  rating: 9.5,
+	  episodesCompleted: 1,
+	  episodesTotal: 1,
+	  notes: "This one gets me every time.",
+	  tags: ["favorite","2018","Japanese","Hirokazu Koreeda"],
+	  dateAdded: 2021-10-25
+    }
+  ]
 }
 ```
 
-An Example List with Embedded Items:
-
-```javascript
-{
-  user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
-  createdAt: // timestamp
-}
-```
-
-
-## [Link to Commented First Draft Schema](db.js) 
-
-(___TODO__: create a first draft of your Schemas in db.js and link to it_)
+### [First Draft Schema](./src/db.js?raw=true) 
 
 ## Wireframes
 

@@ -1,0 +1,25 @@
+{
+  "name": "thomashuang02-final-project",
+  "version": "1.0.0",
+  "description": "So showstopper, but showstarter instead.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project/issues"
+  },
+  "homepage": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.14"
+  }
+}

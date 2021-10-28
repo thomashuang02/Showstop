@@ -68,7 +68,42 @@ The application will store Users, each containing a List containing Media entrie
 }
 ```
 
-### [First Draft Schema](./src/db.js?raw=true) 
+### [First Draft Schema](./back-end/src/db.js?raw=true):
+```javascript
+const mongoose = require('mongoose');
+
+// User Schema
+const mongoose = require('mongoose');
+
+// Media Entry Schema
+const EntrySchema = new mongoose.Schema({
+    title: String,               //name of entry
+    type: String,               //type of media, e.g. film
+    genres: [String],           //list of genres
+    status: String,             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    rating: Number,             //user rating from 0.0 to 10.0
+    episodesCompleted: Number,  //number of episodes user has watched
+    episodesTotal: Number,      //total episodes for this media
+    notes: String,
+    tags: [String],             //tags, such as release year, director, actors/actresses, etc
+    dateAdded: Date             //date this entry was added
+});
+
+// User Schema
+const UserSchema = new mongoose.Schema({
+    username: String,   //e.g. movieaddict420
+    avatar: String,     //reference to image that user can upload
+    bio: String,        //optional bio
+    hash: String,       //hashed password
+    salt: String,       //salt used for hashing passowrd
+    list: [EntrySchema] //list of media entries
+});
+
+mongoose.model('Entry', EntrySchema);
+mongoose.model('User', UserSchema);
+
+mongoose.connect('mongodb://localhost/aitfinalproject');
+```
 
 ## Wireframes
 
@@ -105,27 +140,47 @@ The application will store Users, each containing a List containing Media entrie
 
 ## Research Topics
 
-(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_)
+(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_).
+* (3 points) Perform client side form validation using a JavaScript library (probably [validator](https://github.com/yairEO/validator)).
+* (2 points) Configure and use a Bootstrap theme and use the framework throughout the site.
+* (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. Will use React for my entire front-end, so I've assigned it 3 points.
+* (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
+* (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
 
-* (5 points) Integrate user authentication
-    * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
-
-10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit_)
+10 points total out of 8 required points.
 
 
-## [Link to Initial Main Project File](app.js) 
+## [Initial Main Project File](./back-end/src/app.js?raw=true) 
 
-(___TODO__: create a skeleton Express application with a package.json, app.js, views folder, etc. ... and link to your initial app.js_)
+```javascript
+const express = require('express');
+const app = express();
+
+const path = require('path');
+const publicPath = path.join(__dirname, 'public');
+app.use(express.static(publicPath));
+
+const morgan = require("morgan")
+app.use(morgan("dev"))
+
+//bringing in db
+require( './db' );
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const Entry = mongoose.model('Entry');
+
+app.use(express.urlencoded({ extended: false }));
+
+app.get('/', (req, res) => {
+    res.send('hullo');
+});
+
+app.listen(3000);
+```
 
 ## Annotations / References Used
+
+I'll be updating this as I work on the project.
 
 (___TODO__: list any tutorials/references/etc. that you've based your code off of_)
 

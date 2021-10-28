@@ -140,12 +140,16 @@ mongoose.connect('mongodb://localhost/aitfinalproject');
 
 ## Research Topics
 
-(___TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed_).
 * (3 points) Perform client side form validation using a JavaScript library (probably [validator](https://github.com/yairEO/validator)).
+  * useful for making text fields (such as username/password) are reasonable lengths, and helpful for helping user input valid criteria when creating/editing entries and searching/filtering list
 * (2 points) Configure and use a Bootstrap theme and use the framework throughout the site.
-* (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. Will use React for my entire front-end, so I've assigned it 3 points.
+  * I will still likely use some raw CSS, but I don't want that to be my focus.
+* (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. 
+  * I plan to use React for my entire front-end then connect it to Express on the back-end (which will essentially just be a proxy to my Mongo database), so I've assigned it 3 points.
 * (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
+  * This is going to make debugging my server a fair bit easier.
 * (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
+  * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
 10 points total out of 8 required points.
 

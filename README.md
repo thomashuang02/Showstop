@@ -74,21 +74,21 @@ The application will store Users, each containing a List containing Media entrie
 
 /login - page for login or sign-up
 
-![login](./ux-design/wireframe-login.png?raw=true)
-![sign up overlay](./ux-design/wireframe-sign-up.png?raw=true)
+![login](./ux-design/wireframes/wireframe-login.png?raw=true)
+![sign up overlay](./ux-design/wireframes/wireframe-sign-up.png?raw=true)
 
 /list - page for displaying and manipulating list (done through overlays, not through new pages)
 
-![list](./ux-design/wireframe-list.png?raw=true)
+![list](./ux-design/wireframes/wireframe-list.png?raw=true)
 
 - Users can click on any entry to view its details. Rating, status, and progress can be edited here. Users can also further edit or delete an entry from this overlay.
-![view entry overlay](./ux-design/wireframe-view-entry.png?raw=true)
+![view entry overlay](./ux-design/wireframes/wireframe-view-entry.png?raw=true)
 
 - Users can add/edit an entry either by clicking "Add Entry" on the top left of the list, or by clicking "Edit" when viewing an entry.
-![add entry overlay](./ux-design/wireframe-add-entry.png?raw=true)
+![add entry overlay](./ux-design/wireframes/wireframe-add-entry.png?raw=true)
 
 - Users can search and filter the list by various criteria.
-![search overlay](./ux-design/wireframe-search.png?raw=true)
+![search overlay](./ux-design/wireframes/wireframe-search.png?raw=true)
 
 ## Site map
 

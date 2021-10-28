@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
 
 // Media Entry Schema
 const EntrySchema = new mongoose.Schema({
-    name: String,               //name of entry
+    title: String,               //name of entry
     type: String,               //type of media, e.g. film
     genres: [String],           //list of genres
     status: String,             //Plan to Watch, Watching, Completed, On Hold, or Dropped

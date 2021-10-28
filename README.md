@@ -1,14 +1,16 @@
-# Showstarter 
+
+
+# Showstop
 
 ## Overview
-
-So showstopper, but showstarter instead.
 
 Most of us consume media recreationally, but it seems like the more we consume it, the more that already boundless pool expands. What have I already seen, and what have I dropped? When did I watch it, and what did I think of it? What new (or old) movies or shows look interesting, and how can I keep track of them? 
 
 Showstarter aims to be a simple web application that helps its user keep track of the answers to all those questions, helping them develop a collection of their past, present, and future media consumption. Now we can at least document the time we've ~~wasted~~ invested!
 
 Users will be able to create accounts in the system, where their personal records are stored in an entry per piece of media (containing information on that media as well as the user's ratings). Users can login and create, view, manipulate, and delete entries, and (hopefully) search, filter, and sort their list based on various criteria.
+
+(This is loosely a MyAnimeList clone.)
 
 
 ## Data Model
@@ -27,11 +29,11 @@ The application will store Users, each containing a List containing Media entrie
   salt: // salt used when hashing password
   list: [
     {
-	  name: "My Name",
+	  title: "My Name",
 	  type: "TV Series",
 	  genres: ["Action","Crime","Drama","Mystery","Thriller"],
 	  status: "Watching",
-	  rating: 9.5,
+	  rating: 8.5,
 	  episodesCompleted: 6,
 	  episodesTotal: 8,
 	  notes: "Charismatic actresses and actors in awesome fight choreography sequences strung together by a compelling story.",
@@ -39,7 +41,7 @@ The application will store Users, each containing a List containing Media entrie
 	  dateAdded: 2021-10-26
     },
     {
-	  name: "Wotakoi: Love is Hard for Otaku",
+	  title: "Wotakoi: Love is Hard for Otaku",
 	  type: "TV Series",
 	  genres: ["Comedy","Romance","Slice of Life"],
 	  status: "Plan to Watch",
@@ -51,7 +53,7 @@ The application will store Users, each containing a List containing Media entrie
 	  dateAdded: 2021-10-26
     },
     {
-	  name: "Shoplifters",
+	  title: "Shoplifters",
 	  type: "Film",
 	  genres: ["Crime","Drama"],
 	  status: "Completed",
@@ -70,36 +72,36 @@ The application will store Users, each containing a List containing Media entrie
 
 ## Wireframes
 
-(___TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc._)
+/login - page for login or sign-up
 
-/list/create - page for creating a new shopping list
+![login](./ux-design/wireframe-login.png?raw=true)
+![sign up overlay](./ux-design/wireframe-sign-up.png?raw=true)
 
-![list create](documentation/list-create.png)
+/list - page for displaying and manipulating list (done through overlays, not through new pages)
 
-/list - page for showing all shopping lists
+![list](./ux-design/wireframe-list.png?raw=true)
 
-![list](documentation/list.png)
+- Users can click on any entry to view its details. Rating, status, and progress can be edited here. Users can also further edit or delete an entry from this overlay.
+![view entry overlay](./ux-design/wireframe-view-entry.png?raw=true)
 
-/list/slug - page for showing specific shopping list
+- Users can add/edit an entry either by clicking "Add Entry" on the top left of the list, or by clicking "Edit" when viewing an entry.
+![add entry overlay](./ux-design/wireframe-add-entry.png?raw=true)
 
-![list](documentation/list-slug.png)
+- Users can search and filter the list by various criteria.
+![search overlay](./ux-design/wireframe-search.png?raw=true)
 
 ## Site map
 
-(___TODO__: draw out a site map that shows how pages are related to each other_)
-
-Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/20/Sitemap_google.jpg), but you can create one without the screenshots, drop shadows, etc. ... just names of pages and where they flow to.
+![site map](./ux-design/site-map.png?raw=true)
 
 ## User Stories or Use Cases
 
-(___TODO__: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://www.mongodb.com/download-center?jmp=docs&_ga=1.47552679.1838903181.1489282706#previous)_)
-
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can create a new grocery list
-4. as a user, I can view all of the grocery lists I've created in a single list
-5. as a user, I can add items to an existing grocery list
-6. as a user, I can cross off items in an existing grocery list
+3. as a user, I can view all my media in a single list
+4. as a user, I can view the details of any particular entry in my list
+5. as a user, I can add new entries as well as edit/delete existing ones
+6. as a user, I can search through my list based on criteria I decide
 
 ## Research Topics
 

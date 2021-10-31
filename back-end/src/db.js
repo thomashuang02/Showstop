@@ -17,14 +17,11 @@ const EntrySchema = new mongoose.Schema({
 // User Schema
 const UserSchema = new mongoose.Schema({
     username: String,   //e.g. movieaddict420
-    avatar: String,     //reference to image that user can upload
-    bio: String,        //optional bio
-    hash: String,       //hashed password
-    salt: String,       //salt used for hashing passowrd
+    password: String,   //salt+hashed password using bcryptjs
     list: [EntrySchema] //list of media entries
 });
 
-mongoose.model('Entry', EntrySchema);
-mongoose.model('User', UserSchema);
-
-mongoose.connect('mongodb://localhost/aitfinalproject');
+module.exports = {
+    Entry: mongoose.model('Entry', EntrySchema),
+    User: mongoose.model('User', UserSchema),
+}

@@ -1,0 +1,193 @@
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+#container {
+    display: flex;
+}
+
+#title-and-phrase {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 20vw;
+    top: 20vh;
+    margin-right: 50vw;
+}
+#title-and-phrase > #title {
+    font-size: 48px;
+    margin-bottom: 0px;
+}
+#title-and-phrase > #phrase {
+    font-size: 24px;
+    font-weight: normal;
+    width: auto;
+    padding: 0 0 20px;
+    display: inline-block;
+    text-rendering: optimizelegibility;
+}
+
+.rainbow { 
+    background-color: black;
+    background: linear-gradient(124deg, #048300, #32cc04, #8bd600, #32cc04);
+    background-size: 200%;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: rainbow 4s ease infinite;
+    -moz-animation: rainbow 4s ease infinite;
+    -o-animation: rainbow 4s ease infinite;
+    animation: rainbow 4s ease infinite;
+}
+
+@-webkit-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-moz-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-o-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes rainbow { 
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+
+/* LOGIN STUFF */
+#form {
+    display: flex;
+    right: 20vw;
+    position: relative;
+    height: 350px;
+    width: 400px;
+    border-radius: 10px;
+    flex-direction: column;
+    top: 18vh;
+    justify-content: flex-start;
+    padding: 10px 10px 20px 10px;
+    align-items: center;
+    box-shadow: 0 5px 5px 3px gainsboro;
+    text-align: center;
+}
+
+#form > input[type=text], #form > input[type=password] {
+    font-size: 17px;
+    height: 35%;
+    margin: 8px 0;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 16px;
+    width: 95%;
+    border: 1.5px solid #d6d6d6;
+}
+#form > input[type=text]:focus, #form > input[type=password]:focus {
+    outline: none;
+    border: 1px solid #53c725;
+    box-shadow: 0 0 5px #8fce71;
+    caret-color: #76df4c;
+}
+#login-button {
+    background-color: #2bb601;
+    color: white;
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    height: 120px;
+    width: 95%;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin: 8px 0px 10px;
+}
+#login-button:hover {
+    background-color: #32cc04;
+    cursor: pointer;
+}
+
+#sign-up-button {
+    background-color: #a0a0a0;
+    color: white;
+    font-size: 18px;
+    border-radius: 5px;
+    border: none;
+    height: 100px;
+    width: 69%;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.5s;
+}
+#sign-up-button:hover {
+    background-color: #2bb601;
+    cursor: pointer;
+}
+
+#divider {
+    width: 95%;
+    height: 0.1%;
+    background-color: rgb(163, 163, 163);
+    border: none;
+}
+
+#no-account {
+    color: rgb(94, 94, 94);
+    margin-bottom: 0px;
+    font-size: 14px;
+    text-rendering: optimizelegibility;
+}
+
+#back-to-login {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #239400;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 10px 0 7px 0;
+
+}
+
+
+@media screen and (max-width: 1500px) {
+    #title-and-phrase {
+        left: 10vw;
+        margin-right: 30vw;
+    }
+    #form {
+        right: 10vw;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #title-and-phrase {
+        width: 400px;
+        top: 20px;
+        text-align: center;
+        margin-right: 0;
+        left: 0;
+    }
+    #form {
+        width: 400px;
+        text-align: center;
+        left: 0;
+        right: 0;
+        margin-top: -30px;
+        top: 80px;
+        flex: 0em;
+    }
+    #title-and-phrase, #form {
+        position: relative;
+    }
+}

@@ -4,7 +4,6 @@ const path = require('path');
 const morgan = require("morgan");
 const cors = require('cors');
 const passport = require('passport');
-const passportLocal = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
@@ -75,10 +74,6 @@ app.post("/register", (req, res) => {
     });
 });
 app.get("/user", (req, res) => {
-    console.log(req.user);
-    res.send(req.user);
-});
-app.get("/list", (req, res) => {
     res.send(req.user);
 });
 /* --------------------------- end route handlers --------------------------- */

@@ -77,6 +77,24 @@
     align-items: center;
     box-shadow: 0 5px 5px 3px gainsboro;
     text-align: center;
+    background-color: white;
+}
+
+#error {
+    position: absolute;
+    top: -35px;
+    max-width: 400px;
+    text-align: center;
+    color: red;
+    margin: 0;
+    font-size: 15px;
+}
+@keyframes fadeIn { /* flame pulses */
+    from { opacity: 0.4; } 
+}
+.animate-flicker {
+    opacity:1;  
+    animation: fadeIn 2s infinite alternate;
 }
 
 #form > input[type=text], #form > input[type=password] {
@@ -151,9 +169,11 @@
     text-decoration: underline;
     cursor: pointer;
     margin: 10px 0 7px 0;
-
 }
 
+#back-to-login:hover {
+    color: #2bb900;
+}
 
 @media screen and (max-width: 1500px) {
     #title-and-phrase {

@@ -138,6 +138,17 @@ const Login = (props) => {
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
+    /* -------------------- importing typewriter text script -------------------- */
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = "./scripts/Typewriter.js";
+        script.async = true;
+        document.body.appendChild(script);
+        return () => {
+          document.body.removeChild(script);
+        }
+      }, []);
+
     /* ----------------------------------- jsx ---------------------------------- */
     if(!user) {
         return (
@@ -148,7 +159,7 @@ const Login = (props) => {
                     </h1>
                     <h2 id="phrase">
                         Your one-stop shop for keeping track of the shows 
-                        you {currentWord}. 
+                        you <span id="typewriter-text"></span><div id="cursor"></div>
                     </h2>
                 </div>
                 <div id="form-container">

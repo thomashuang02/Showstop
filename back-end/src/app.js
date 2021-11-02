@@ -13,8 +13,8 @@ const app = express();
 
 /* ------------------------------- middleware ------------------------------- */
 app.use(morgan("dev"))
-const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
+const buildPath = path.join(__dirname, 'public../front-end/build');
+app.use(express.static(buildPath));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
@@ -42,21 +42,26 @@ mongoose.connect("mongodb+srv://thomashuang02:admin@users.vdifr.mongodb.net/user
     console.log("Mongoose is connected.");
 });
 
-/* ----------------------------- route handlers ----------------------------- */
-app.post("/login", (req, res, next) => {
+/* ----------------------------- authentication ----------------------------- */
+const authenticate = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
-        if (!user) res.send("Login Unsuccessful");
+        if (!user) res.send(false);
         else {
             req.logIn(user, err => {
                 if (err) throw err;
-                res.send("Successfully Authenticated");
+                res.send(true);
                 console.log(req.user);
             });
         }
     })(req, res, next);
+}
+
+/* ----------------------------- route handlers ----------------------------- */
+app.post("/login", (req, res, next) => {
+    authenticate(req, res, next);
 });
-app.post("/register", (req, res) => {
+app.post("/register", (req, res, next) => {
     User.findOne({username: req.body.username}, async (err, user) => {
         if (err) throw err;
         if (user) {
@@ -69,7 +74,7 @@ app.post("/register", (req, res) => {
                 password: hashedPassword,
             });
             await newUser.save();
-            res.send("New User Created");
+            authenticate(req, res, next);
         }
     });
 });
@@ -77,6 +82,7 @@ app.get("/user", (req, res) => {
     res.send(req.user);
 });
 /* --------------------------- end route handlers --------------------------- */
+
 //start server
 app.listen(4000, () => {
     console.log('Server started on port 4000.')

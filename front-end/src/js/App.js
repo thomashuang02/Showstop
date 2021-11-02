@@ -1,8 +1,8 @@
 import { React, useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import './App.css';
-import Login from './Login/Login';
-import List from './List/List';
+import '../css/App.css';
+import Login from './Login';
+import List from './List';
 
 const App = (props) => {
   const [user, setUser] = useState(null);

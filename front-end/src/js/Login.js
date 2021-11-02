@@ -1,5 +1,5 @@
 import {React, useEffect, useState} from 'react';
-import './Login.css';
+import '../css/Login.css';
 import { Redirect } from "react-router-dom"
 import axios from 'axios';
 
@@ -32,12 +32,13 @@ const Login = (props) => {
     const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
-    const [error, setError] = useState(null);
+    const api = "http://localhost:4000";
+    const [loginError, setLoginError] = useState(null);
     const getUser = () => {
         axios({
             method: "GET",
             withCredentials: true,
-            url: "http://localhost:4000/user"
+            url: (api + "/user")
         }).then(res => {
             setUser(res.data);
         });
@@ -50,34 +51,29 @@ const Login = (props) => {
                 password: loginPassword,
             },
             withCredentials: true,
-            url: "http://localhost:4000/login"
+            url: (api + "/login")
         }).then(res => {
-            console.log('logged in as', res);
+            if(res.data) {
+                console.log("Successfully authenticated.");
+            } else {
+                console.log("Authentication unsuccessful.");
+                setLoginError("No such user/password combo exists.")
+            }
         });
         getUser();
     }
     const usernameRegex = /^[a-zA-Z0-9]+$/;
-    const validateRegistration = (username, password, confirmPassword) => {
-        if (username.length < 3) {
-            setError("Username length should be at least 3.");
-            return false;
-        }
-        else if (!usernameRegex.exec(username)) {
-            setError("Username should be alphanumeric.");
-            return false;
-        }
-        else if(password !== confirmPassword) {
-            setError("Passwords don't match.");
-            return false;
-        }
-        else if(password.length < 8) {
-            setError("Password length should be at least 8.")
-            return false;
-        }
-        return true;
+    const regConditions = [
+        {message: 'Username contains only alphanumeric characters', satisfied: (usernameRegex.exec(registerUsername))},
+        {message: 'Username is at least 3 characters long', satisfied: (registerUsername.length >= 3)},
+        {message: 'Password is between 8 and 128 characters long', satisfied: (registerPassword.length >= 8 && registerPassword.length <= 128)},
+        {message: 'Passwords match', satisfied: (registerPassword.length > 0 && registerPassword === registerConfirmPassword)}
+    ];
+    const validateRegistration = () => {
+        return regConditions.reduce((valid, condition) => valid && condition.satisfied, true);
     }
     const handleRegister = async () => {
-        if (validateRegistration(registerUsername, registerPassword, registerConfirmPassword)) {
+        if (validateRegistration()) {
             await axios({
                 method: "POST",
                 data: {
@@ -85,7 +81,7 @@ const Login = (props) => {
                     password: registerPassword,
                 },
                 withCredentials: true,
-                url: "http://localhost:4000/register"
+                url: (api) + "/register"
             }).then(res => {
                 console.log('registered as', res);
             });
@@ -109,7 +105,7 @@ const Login = (props) => {
     const loginForm = () => {
         return (
             <div id="form">
-                { error && <p id="error" className="animate-flicker">{error}</p>}
+                { loginError && <p id="error" className="animate-flicker">{loginError}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setLoginUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)}></input>
                 <button id="login-button" onClick={handleLogin}>Log In</button>
@@ -122,12 +118,18 @@ const Login = (props) => {
     const registerForm = () => {
         return (
             <div id="form">
-                { error && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setRegisterUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setRegisterPassword(e.target.value)}></input>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={e => setRegisterConfirmPassword(e.target.value)}></input>
                 <button id="login-button" onClick={handleRegister}>Sign Up</button>
                 <button id="back-to-login" onClick={toggleState}>Back to login</button>
+                {/* &#10006; cross, &#x2714; check */}
+                <div id="reg-conditions">{regConditions.map((condition, i) => 
+                    <p className="reg-condition" style={condition.satisfied ? {"color":"black"} : {"color":"gray"}} key={i}>{
+                        condition.satisfied ? <span className="check">&#x2714;</span> : <span className="X">&#10006;</span>
+                        } {condition.message}
+                    </p>
+                )}</div>
             </div>
         )
     }

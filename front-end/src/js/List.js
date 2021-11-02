@@ -1,6 +1,6 @@
 import {React, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
-import './List.css';
+import '../css/List.css';
 
 const List = (props) => {
     const [user, setUser] = [props.user, props.setUser];

@@ -1,0 +1,20 @@
+{
+  "name": "thomashuang02-final-project",
+  "version": "1.0.0",
+  "description": "Most of us consume media recreationally, but it seems like the more we consume it, the more that already boundless pool expands. What have I already seen, and what have I dropped? When did I watch it, and what did I think of it? What new (or old) movies or shows look interesting, and how can I keep track of them?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./back-end/src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project/issues"
+  },
+  "homepage": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project#readme"
+}

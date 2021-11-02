@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./back-end/src/app.js",
+    "postinstall": "find ./* -name package.json -maxdepth 2 -execdir npm install \\;",
     "heroku-postbuild": "cd front-end && npm install && npm run build"
   },
   "repository": {

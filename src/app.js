@@ -13,7 +13,7 @@ const app = express();
 
 /* ------------------------------- middleware ------------------------------- */
 app.use(morgan("dev"))
-const buildPath = path.join(__dirname, 'public../front-end/build');
+const buildPath = path.join(__dirname, '../front-end/build');
 app.use(express.static(buildPath));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -81,10 +81,14 @@ app.post("/register", (req, res, next) => {
 app.get("/user", (req, res) => {
     res.send(req.user);
 });
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './front-end/build/index.html'));
+});
 /* --------------------------- end route handlers --------------------------- */
 
 //start server
-const PORT = process.env.PORT || 4000;
+//const PORT = process.env.PORT || 4000;
+const PORT = 4000;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}.`)
 });

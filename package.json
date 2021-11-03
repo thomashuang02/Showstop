@@ -1,13 +1,12 @@
 {
   "name": "thomashuang02-final-project",
   "version": "1.0.0",
-  "description": "Most of us consume media recreationally, but it seems like the more we consume it, the more that already boundless pool expands. What have I already seen, and what have I dropped? When did I watch it, and what did I think of it? What new (or old) movies or shows look interesting, and how can I keep track of them?",
-  "main": "index.js",
+  "description": "Showstop!",
+  "main": "./src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./back-end/src/app.js",
-    "postinstall": "find ./* -name package.json -maxdepth 2 -execdir npm install \\;",
-    "heroku-postbuild": "cd back-end && npm install && cd ../front-end && npm install && npm run build"
+    "start": "node ./src/app.js",
+    "heroku-postbuild": "cd front-end && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -18,5 +17,19 @@
   "bugs": {
     "url": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project/issues"
   },
-  "homepage": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project#readme"
+  "homepage": "https://github.com/nyu-csci-ua-0467-001-fall-2021/thomashuang02-final-project#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.0.12",
+    "morgan": "^1.10.0",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  }
 }

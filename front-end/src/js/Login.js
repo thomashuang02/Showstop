@@ -32,13 +32,14 @@ const Login = (props) => {
     const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
-    const api = "http://localhost:4000";
+    //const PORT = 4000;
+    //const api = `https://localhost:${PORT}`;
     const [loginError, setLoginError] = useState(null);
     const getUser = () => {
         axios({
             method: "GET",
             withCredentials: true,
-            url: (api + "/user")
+            url: "/user"
         }).then(res => {
             setUser(res.data);
         });
@@ -51,13 +52,13 @@ const Login = (props) => {
                 password: loginPassword,
             },
             withCredentials: true,
-            url: (api + "/login")
+            url: "/login"
         }).then(res => {
             if(res.data) {
                 console.log("Successfully authenticated.");
             } else {
                 console.log("Authentication unsuccessful.");
-                setLoginError("No such user/password combo exists.")
+                setLoginError("Can't find that user/password combo.")
             }
         });
         getUser();
@@ -81,7 +82,7 @@ const Login = (props) => {
                     password: registerPassword,
                 },
                 withCredentials: true,
-                url: (api) + "/register"
+                url: "/register"
             }).then(res => {
                 console.log('registered as', res);
             });
@@ -94,9 +95,19 @@ const Login = (props) => {
     const toggleState = () => {
         if(state === "login") {
             setState("register");
+            setRegisterUsername(loginUsername);
+            setRegisterPassword(loginPassword);
+            setRegisterConfirmPassword("");
+            setLoginUsername("");
+            setLoginPassword("");
         }
         else {
             setState("login");
+            setLoginUsername(registerUsername);
+            setLoginPassword(registerPassword);
+            setRegisterUsername("");
+            setRegisterPassword("");
+            setRegisterConfirmPassword("");
         }
     }
     const displayForm = () => {
@@ -118,6 +129,7 @@ const Login = (props) => {
     const registerForm = () => {
         return (
             <div id="form">
+                <div style={{"display":"none"}}></div>
                 <input type="text" name="username" placeholder="Username" onChange={e => setRegisterUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setRegisterPassword(e.target.value)}></input>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={e => setRegisterConfirmPassword(e.target.value)}></input>

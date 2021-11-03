@@ -87,8 +87,7 @@ app.get('*', (req, res) => {
 /* --------------------------- end route handlers --------------------------- */
 
 //start server
-//const PORT = process.env.PORT || 4000;
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}.`)
 });

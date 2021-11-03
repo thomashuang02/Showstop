@@ -34,7 +34,7 @@ const Login = (props) => {
     const [loginPassword, setLoginPassword] = useState("");
     //const PORT = 4000;
     //const api = `https://localhost:${PORT}`;
-    const [loginError, setLoginError] = useState(null);
+    const [error, setError] = useState(null);
     const getUser = () => {
         axios({
             method: "GET",
@@ -58,7 +58,7 @@ const Login = (props) => {
                 console.log("Successfully authenticated.");
             } else {
                 console.log("Authentication unsuccessful.");
-                setLoginError("Can't find that user/password combo.")
+                setError("Can't find that user/password combo.")
             }
         });
         getUser();
@@ -84,7 +84,12 @@ const Login = (props) => {
                 withCredentials: true,
                 url: "/register"
             }).then(res => {
-                console.log('registered as', res);
+                if(res.data) {
+                    console.log('registered as', res);
+                }
+                else {
+                    setError("Sorry, that username's taken.")
+                }
             });
             getUser();
         }
@@ -116,7 +121,7 @@ const Login = (props) => {
     const loginForm = () => {
         return (
             <div id="form">
-                { loginError && <p id="error" className="animate-flicker">{loginError}</p>}
+                { error && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setLoginUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)}></input>
                 <button id="login-button" onClick={handleLogin}>Log In</button>
@@ -129,7 +134,7 @@ const Login = (props) => {
     const registerForm = () => {
         return (
             <div id="form">
-                <div style={{"display":"none"}}></div>
+                { error && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setRegisterUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setRegisterPassword(e.target.value)}></input>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={e => setRegisterConfirmPassword(e.target.value)}></input>

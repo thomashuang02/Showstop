@@ -82,7 +82,7 @@ app.get("/user", (req, res) => {
     res.send(req.user);
 });
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './front-end/build/index.html'));
+    res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
 });
 /* --------------------------- end route handlers --------------------------- */
 

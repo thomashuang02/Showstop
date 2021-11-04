@@ -18,7 +18,7 @@ const App = (props) => {
 
           {/*list page*/}
           <Route path="/list">
-            <List user={user} setUser={setUser}/>
+            <List user={user}/>
           </Route>
         </Switch>
       </Router>

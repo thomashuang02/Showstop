@@ -85,6 +85,11 @@
     border-bottom: 1px solid hsl(0, 0%, 80%);
     padding: 8px;
 }
+#basic-search:focus {
+    outline: none !important;
+    border: 1px solid #29af00;
+    border-right: 0;
+}
 #advanced-search {
     font-weight: bold;
     border: 1px solid #2ab300;
@@ -146,6 +151,7 @@
 .title {
     width: auto;
     padding-left: 10px;
+    font-weight: bold;
 }
 .rating {
     width: 120px;
@@ -155,9 +161,14 @@
     width: 120px;
     text-align: center;
 }
-.progression {
+.progression-header {
     width: 120px;
     text-align: center;
+}
+.progression {
+    width: 120px;
+    text-align: right;
+    padding-right: 45px !important;
 }
 .type {
     width: 120px;
@@ -181,13 +192,22 @@
 
 /* ------------------------------- list items ------------------------------- */
 .plus-button {
+    position: absolute;
+    left: 5px;
     font-size: 13px;
-    color: #1f8500;
+    color: #26a300;
     transition: color 0.2s ease;
 }
 .plus-button:hover {
     color: #32cc04;
     cursor: pointer;
+}
+.absolute {
+    display: inline;
+    position: relative;
+}
+.placeholder {
+    color: rgb(180, 180, 180);
 }
 
 /* --------------------------- gradient animation --------------------------- */

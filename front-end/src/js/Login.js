@@ -123,7 +123,7 @@ const Login = (props) => {
             <div id="form">
                 { error && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setLoginUsername(e.target.value)}></input>
-                <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)}></input>
+                <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)} onKeyDown={onKeyDown}></input>
                 <button id="login-button" onClick={handleLogin}>Log In</button>
                 <hr id="divider"/>
                 <p id="no-account">Don't have an account yet?</p>
@@ -157,6 +157,27 @@ const Login = (props) => {
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
+    /* ----------------------- enter keydown submit login ----------------------- */
+    useEffect(() => {
+        const listener = event => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+            console.log("Enter key was pressed. Run your function.");
+            // callMyFunction();
+            }
+        };
+        document.addEventListener("keydown", listener);
+        return () => {
+            document.removeEventListener("keydown", listener);
+        };
+    }, []);
+    const onKeyDown = event => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            handleLogin();
+        }
+    }
+
     /* -------------------- importing typewriter text script -------------------- */
     useEffect(() => {
         const script = document.createElement('script');

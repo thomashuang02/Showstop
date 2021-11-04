@@ -4,7 +4,7 @@ import Select from 'react-select'
 import '../css/List.css';
 
 const List = (props) => {
-    const [user, setUser] = [props.user, props.setUser];
+    const user = props.user;
     useEffect(() => {
         if(user) {
             document.title = `${user.username}'s List`;
@@ -20,15 +20,17 @@ const List = (props) => {
 
     /* ------------------------------ status select ----------------------------- */
     const options = [
-        { value: "everything", label: "Everything" },
-        { value: "watching", label: "Watching" },
-        { value: "completed", label: "Completed" },
-        { value: "onHold", label: "On Hold" },
-        { value: "dropped", label: "Dropped" },
-        { value: "planToWatch", label: "Plan To Watch" },
+        { value: "Everything", label: "Everything" },
+        { value: "Watching", label: "Watching" },
+        { value: "Completed", label: "Completed" },
+        { value: "On Hold", label: "On Hold" },
+        { value: "Dropped", label: "Dropped" },
+        { value: "Plan To Watch", label: "Plan To Watch" },
     ]
-    const handleSubmit = value => {
+    const [status, setStatus] = useState("Everything");
+    const handleSelect = value => {
         console.log(value.value);
+        setStatus(value.value);
     }
     const customStyles = {
         menu: (provided, state) => ({
@@ -59,7 +61,149 @@ const List = (props) => {
             primary: '#29af00',
         },
     })
+    
+    const dummyList = [
+        {
+            title: "Amagi Brilliant Park",               //name of entry
+            rating: 8,             //user rating from 0.0 to 10.0
+            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: 13,  //number of episodes user has watched
+            episodesTotal: 13,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
+            tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
+            title: "Wotakoi",               //name of entry
+            rating: 7,             //user rating from 0.0 to 10.0
+            status: "Watching",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: null,  //number of episodes user has watched
+            episodesTotal: 24,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "Good-ass show",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
+            title: "Sword Art Online",               //name of entry
+            rating: 7,             //user rating from 0.0 to 10.0
+            status: "Dropped",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: 12,  //number of episodes user has watched
+            episodesTotal: 24,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "Good-ass show",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
+            title: "Sakurasou No Pet Na Kanojo",               //name of entry
+            rating: 7,             //user rating from 0.0 to 10.0
+            status: "On Hold",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: 24,  //number of episodes user has watched
+            episodesTotal: 24,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "Good-ass show",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
+            title: "Angel Beats",               //name of entry
+            rating: 9,             //user rating from 0.0 to 10.0
+            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: 13,  //number of episodes user has watched
+            episodesTotal: 13,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "Good-ass show",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
+            title: "Baccano",               //name of entry
+            rating: null,             //user rating from 0.0 to 10.0
+            status: "Plan To Watch",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: null,  //number of episodes user has watched
+            episodesTotal: null,      //total episodes for this media
+            type: null,               //type of media, e.g. film
+            genres: [],           //list of genres
+            tags: [],             //tags, such as release year, director, actors/actresses, etc
+            notes: null,
+            dateAdded: new Date()             //date this entry was added
+        },
+    ]
+    /* ------------------------------- list items ------------------------------- */
+    const generateEntries = () => {
+        sortListFunction();
+        return ( 
+            <tbody>
+                {dummyList.filter(entry => {
+                    if (!entry.title.toLowerCase().includes(searchCriteria.toLowerCase()))
+                        return false;
+                    if (status !== "Everything" && entry.status !== status)
+                        return false;
+                    return true;
+                })
+                .map((entry, i) => 
+                    <tr key={i}>
+                        <td className="number">{i+1}</td>
+                        <td className="title">{entry.title}</td>
+                        <td className="rating">
+                            {entry.rating ? <span>{entry.rating}</span> : <span>&ndash;</span>}
+                            </td>
+                        <td className="status">{entry.status}</td>
+                        <td className="progression">
+                            {entry.episodesTotal 
+                                ? <span>{entry.episodesCompleted
+                                    ? <span>{entry.episodesCompleted}</span> : <span>&ndash;&nbsp;</span>}
+                                        /{entry.episodesTotal} 
+                                        {entry.episodesCompleted < entry.episodesTotal 
+                                            ? <div className="absolute"><span className="plus-button glyphicon glyphicon-plus-sign" onClick={handleIncrement}/></div> 
+                                            : null}</span>
+                                : <span>&ndash;&nbsp;&nbsp;&nbsp;</span>}
+                            </td>
+                        <td className="type">
+                            {entry.type ? <span>{entry.type}</span> : <span>&ndash;</span>}</td>
+                        <td className="genres">
+                            {entry.genres.length > 0 
+                                ? <span>{entry.genres.join(", ")}</span>
+                                : <span className="placeholder">No genres yet...</span>
+                            }</td>
+                        <td className="tags">
+                            {entry.tags.length > 0 
+                                ? <span>{entry.tags.join(", ")}</span>
+                                : <span className="placeholder">No tags yet...</span>
+                            }</td>
+                        <td className="notes">{entry.notes && entry.notes.length > 0 
+                                ? <span>{entry.notes}</span>
+                                : <span className="placeholder">No notes yet...</span>
+                            }</td>
+                    </tr>
+                )}
+            </tbody>
+        );
+    }
+    const handleIncrement = () => {
+        console.log("handle increment"); //TODO
+    }
 
+    /* ------------------------------ sorting list ------------------------------ */
+    //status
+    const sortByStatus = () => () => {
+        const statusOrder = ["Watching","Completed","On Hold","Dropped","Plan to Watch"];
+        const orderForIndexVals = statusOrder.slice(0).reverse();
+        dummyList.sort((first, second) => {
+            const aIndex = -orderForIndexVals.indexOf(first.status);
+            const bIndex = -orderForIndexVals.indexOf(second.status);
+            return aIndex - bIndex;
+        });
+    }
+
+    const [sortListFunction, setSortListFunction] = useState(sortByStatus);
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
         return (
@@ -80,7 +224,7 @@ const List = (props) => {
                     </div>
                 </div>
                 <div id="toolbar">
-                    <Select id="status-select" options={options} onChange={ value => handleSubmit(value) }
+                    <Select id="status-select" options={options} onChange={ value => handleSelect(value) }
                         styles={customStyles} theme={customTheme} placeholder={'Status...'}
                     />
                     <span id="search">
@@ -96,500 +240,14 @@ const List = (props) => {
                             <th className="title button">Title &#8593;</th>
                             <th className="rating button">Rating &#8595;</th>
                             <th className="status button">Status &#8593;</th>
-                            <th className="progression button">Progress &#8595;</th>
+                            <th className="progression-header button">Progress &#8595;</th>
                             <th className="type button">Type &#8593;</th>
                             <th className="genres button">Genres &#8595;</th>
                             <th className="tags button">Tags &#8593;</th>
                             <th className="notes button">Notes &#8595;</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        <tr>
-                            <td className="number">1</td>
-                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
-                            <td className="rating">10</td>
-                            <td className="status">Plan to Watch</td>
-                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
-                            <td className="type">Film</td>
-                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
-                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
-                        </tr>
-                        
-                    </tbody>
+                    {generateEntries()}
                     </table>
             </div>
         );

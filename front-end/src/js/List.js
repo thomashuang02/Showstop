@@ -1,5 +1,6 @@
-import {React, useEffect} from 'react';
+import {React, useEffect, useState} from 'react';
 import { Redirect } from 'react-router-dom';
+import Select from 'react-select'
 import '../css/List.css';
 
 const List = (props) => {
@@ -13,13 +14,59 @@ const List = (props) => {
         }
     }, [user]);
 
+    /* ------------------------------ basic search ------------------------------ */
+    const [searchCriteria, setSearchCriteria] = useState("");
+    
+
+    /* ------------------------------ status select ----------------------------- */
+    const options = [
+        { value: "everything", label: "Everything" },
+        { value: "watching", label: "Watching" },
+        { value: "completed", label: "Completed" },
+        { value: "onHold", label: "On Hold" },
+        { value: "dropped", label: "Dropped" },
+        { value: "planToWatch", label: "Plan To Watch" },
+    ]
+    const handleSubmit = value => {
+        console.log(value.value);
+    }
+    const customStyles = {
+        menu: (provided, state) => ({
+          ...provided,
+          zIndex: 2,
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            color: state.isSelected ? "white" : "#29af00",
+            fontWeight: state.isSelected ? "bold" : "normal",
+            backgroundColor: state.isSelected ? "#29af00" : state.isFocused ? "#f0ffeb" : "white",
+            ':active': {
+                ...provided[':active'],
+                backgroundColor: !state.isDisabled
+                  ? state.isSelected
+                    ? "white"
+                    : "#bbebab"
+                  : undefined,
+            },
+        }),
+    }
+    const customTheme = (theme) => ({
+        ...theme,
+        borderRadius: 0,
+        colors: {
+            ...theme.colors,
+            primary25: '#32cc04',
+            primary: '#29af00',
+        },
+    })
+
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
         return (
             <div>
                 <div id="main-header">
                     <div className="left">
-                        <h1 className="rainbow" id="title">
+                        <h1 className="rainbow-text" id="showstop">
                             Showstop
                         </h1>
                     </div>
@@ -27,530 +74,521 @@ const List = (props) => {
                         <h2 id="list-name">{user.username}'s List</h2>
                     </div>
                     <div className="right">
-                        <input type="button" value="Add Entry"/>
+                        <div id="logo">
+                            logo here
+                        </div>
                     </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr id="status-header">
-                            <th>Everything</th>
-                            <th>Watching</th>
-                            <th>Completed</th>
-                            <th>On Hold</th>
-                            <th>Dropped</th>
-                            <th>Plan to Watch</th>
-                            <th id="search-button">&#128269;</th>
-                        </tr>
-                    </thead>
+                <div id="toolbar">
+                    <Select id="status-select" options={options} onChange={ value => handleSubmit(value) }
+                        styles={customStyles} theme={customTheme} placeholder={'Status...'}
+                    />
+                    <span id="search">
+                        <input id="basic-search" type="text" placeholder="Search..." onChange={e => setSearchCriteria(e.target.value)}></input>
+                        <input className="button" id="advanced-search" type="button" value="Advanced Search"/>
+                        <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"/>
+                    </span>
+                </div>
+                <table className="table">
                     <thead>
                         <tr className="sticky" id="info-header">
-                            <th>#</th>
-                            <th>Title</th>
-                            <th>Rating</th>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Progress</th>
-                            <th>Tags</th>
+                            <th className="number button"># &#8595;</th>
+                            <th className="title button">Title &#8593;</th>
+                            <th className="rating button">Rating &#8595;</th>
+                            <th className="status button">Status &#8593;</th>
+                            <th className="progression button">Progress &#8595;</th>
+                            <th className="type button">Type &#8593;</th>
+                            <th className="genres button">Genres &#8595;</th>
+                            <th className="tags button">Tags &#8593;</th>
+                            <th className="notes button">Notes &#8595;</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Lorem.</td>
-                            <td>Ullam.</td>
-                            <td>Vel.</td>
-                            <td>At.</td>
-                            <td>Quis.</td>
-                        </tr>
-                        <tr>
-                        <td>Quas!</td>
-                        <td>Velit.</td>
-                        <td>Quisquam?</td>
-                        <td>Rerum?</td>
-                        <td>Iusto?</td>
-                        </tr>
-                        <tr>
-                        <td>Voluptates!</td>
-                        <td>Fugiat?</td>
-                        <td>Alias.</td>
-                        <td>Doloribus.</td>
-                        <td>Veritatis.</td>
-                        </tr>
-                        <tr>
-                        <td>Maiores.</td>
-                        <td>Ab.</td>
-                        <td>Accusantium.</td>
-                        <td>Ullam!</td>
-                        <td>Eveniet.</td>
-                        </tr>
-                        <tr>
-                        <td>Hic.</td>
-                        <td>Id!</td>
-                        <td>Officiis.</td>
-                        <td>Modi!</td>
-                        <td>Obcaecati.</td>
-                        </tr>
-                        <tr>
-                        <td>Soluta.</td>
-                        <td>Ad!</td>
-                        <td>Impedit.</td>
-                        <td>Alias!</td>
-                        <td>Ad.</td>
-                        </tr>
-                        <tr>
-                        <td>Expedita.</td>
-                        <td>Quo.</td>
-                        <td>Exercitationem!</td>
-                        <td>Optio?</td>
-                        <td>Ipsum?</td>
-                        </tr>
-                        <tr>
-                        <td>Commodi!</td>
-                        <td>Rem.</td>
-                        <td>Aspernatur.</td>
-                        <td>Accusantium!</td>
-                        <td>Maiores.</td>
-                        </tr>
-                        <tr>
-                        <td>Omnis.</td>
-                        <td>Cumque?</td>
-                        <td>Eveniet!</td>
-                        <td>Mollitia?</td>
-                        <td>Vero.</td>
-                        </tr>
-                        <tr>
-                        <td>Error!</td>
-                        <td>Inventore.</td>
-                        <td>Quasi!</td>
-                        <td>Ducimus.</td>
-                        <td>Repudiandae!</td>
-                        </tr>
-                        <tr>
-                        <td>Dolores!</td>
-                        <td>Necessitatibus.</td>
-                        <td>Corrupti!</td>
-                        <td>Eum.</td>
-                        <td>Sunt!</td>
-                        </tr>
-                        <tr>
-                        <td>Ea.</td>
-                        <td>Culpa?</td>
-                        <td>Quam?</td>
-                        <td>Nemo!</td>
-                        <td>Sit!</td>
-                        </tr>
-                        <tr>
-                        <td>Veritatis!</td>
-                        <td>Facilis.</td>
-                        <td>Expedita?</td>
-                        <td>Ipsam!</td>
-                        <td>Omnis!</td>
-                        </tr>
-                        <tr>
-                        <td>Vitae.</td>
-                        <td>Cumque.</td>
-                        <td>Repudiandae.</td>
-                        <td>Ut?</td>
-                        <td>Sed!</td>
-                        </tr>
-                        <tr>
-                        <td>Accusantium.</td>
-                        <td>Adipisci.</td>
-                        <td>Sit.</td>
-                        <td>Maxime.</td>
-                        <td>Harum.</td>
-                        </tr>
-                        <tr>
-                        <td>Quas!</td>
-                        <td>Velit.</td>
-                        <td>Quisquam?</td>
-                        <td>Rerum?</td>
-                        <td>Iusto?</td>
-                        </tr>
-                        <tr>
-                        <td>Voluptates!</td>
-                        <td>Fugiat?</td>
-                        <td>Alias.</td>
-                        <td>Doloribus.</td>
-                        <td>Veritatis.</td>
-                        </tr>
-                        <tr>
-                        <td>Maiores.</td>
-                        <td>Ab.</td>
-                        <td>Accusantium.</td>
-                        <td>Ullam!</td>
-                        <td>Eveniet.</td>
-                        </tr>
-                        <tr>
-                        <td>Hic.</td>
-                        <td>Id!</td>
-                        <td>Officiis.</td>
-                        <td>Modi!</td>
-                        <td>Obcaecati.</td>
-                        </tr>
-                        <tr>
-                        <td>Soluta.</td>
-                        <td>Ad!</td>
-                        <td>Impedit.</td>
-                        <td>Alias!</td>
-                        <td>Ad.</td>
-                        </tr>
-                        <tr>
-                        <td>Expedita.</td>
-                        <td>Quo.</td>
-                        <td>Exercitationem!</td>
-                        <td>Optio?</td>
-                        <td>Ipsum?</td>
-                        </tr>
-                        <tr>
-                        <td>Commodi!</td>
-                        <td>Rem.</td>
-                        <td>Aspernatur.</td>
-                        <td>Accusantium!</td>
-                        <td>Maiores.</td>
-                        </tr>
-                        <tr>
-                        <td>Omnis.</td>
-                        <td>Cumque?</td>
-                        <td>Eveniet!</td>
-                        <td>Mollitia?</td>
-                        <td>Vero.</td>
-                        </tr>
-                        <tr>
-                        <td>Error!</td>
-                        <td>Inventore.</td>
-                        <td>Quasi!</td>
-                        <td>Ducimus.</td>
-                        <td>Repudiandae!</td>
-                        </tr>
-                        <tr>
-                        <td>Dolores!</td>
-                        <td>Necessitatibus.</td>
-                        <td>Corrupti!</td>
-                        <td>Eum.</td>
-                        <td>Sunt!</td>
-                        </tr>
-                        <tr>
-                        <td>Ea.</td>
-                        <td>Culpa?</td>
-                        <td>Quam?</td>
-                        <td>Nemo!</td>
-                        <td>Sit!</td>
-                        </tr>
-                        <tr>
-                        <td>Veritatis!</td>
-                        <td>Facilis.</td>
-                        <td>Expedita?</td>
-                        <td>Ipsam!</td>
-                        <td>Omnis!</td>
-                        </tr>
-                        <tr>
-                        <td>Vitae.</td>
-                        <td>Cumque.</td>
-                        <td>Repudiandae.</td>
-                        <td>Ut?</td>
-                        <td>Sed!</td>
-                        </tr>
-                        <tr>
-                        <td>Accusantium.</td>
-                        <td>Adipisci.</td>
-                        <td>Sit.</td>
-                        <td>Maxime.</td>
-                        <td>Harum.</td>
-                        </tr>
-                        <tr>
-                        <td>Quas!</td>
-                        <td>Velit.</td>
-                        <td>Quisquam?</td>
-                        <td>Rerum?</td>
-                        <td>Iusto?</td>
-                        </tr>
-                        <tr>
-                        <td>Voluptates!</td>
-                        <td>Fugiat?</td>
-                        <td>Alias.</td>
-                        <td>Doloribus.</td>
-                        <td>Veritatis.</td>
-                        </tr>
-                        <tr>
-                        <td>Maiores.</td>
-                        <td>Ab.</td>
-                        <td>Accusantium.</td>
-                        <td>Ullam!</td>
-                        <td>Eveniet.</td>
-                        </tr>
-                        <tr>
-                        <td>Hic.</td>
-                        <td>Id!</td>
-                        <td>Officiis.</td>
-                        <td>Modi!</td>
-                        <td>Obcaecati.</td>
-                        </tr>
-                        <tr>
-                        <td>Soluta.</td>
-                        <td>Ad!</td>
-                        <td>Impedit.</td>
-                        <td>Alias!</td>
-                        <td>Ad.</td>
-                        </tr>
-                        <tr>
-                        <td>Expedita.</td>
-                        <td>Quo.</td>
-                        <td>Exercitationem!</td>
-                        <td>Optio?</td>
-                        <td>Ipsum?</td>
-                        </tr>
-                        <tr>
-                        <td>Commodi!</td>
-                        <td>Rem.</td>
-                        <td>Aspernatur.</td>
-                        <td>Accusantium!</td>
-                        <td>Maiores.</td>
-                        </tr>
-                        <tr>
-                        <td>Omnis.</td>
-                        <td>Cumque?</td>
-                        <td>Eveniet!</td>
-                        <td>Mollitia?</td>
-                        <td>Vero.</td>
-                        </tr>
-                        <tr>
-                        <td>Error!</td>
-                        <td>Inventore.</td>
-                        <td>Quasi!</td>
-                        <td>Ducimus.</td>
-                        <td>Repudiandae!</td>
-                        </tr>
-                        <tr>
-                        <td>Dolores!</td>
-                        <td>Necessitatibus.</td>
-                        <td>Corrupti!</td>
-                        <td>Eum.</td>
-                        <td>Sunt!</td>
-                        </tr>
-                        <tr>
-                        <td>Ea.</td>
-                        <td>Culpa?</td>
-                        <td>Quam?</td>
-                        <td>Nemo!</td>
-                        <td>Sit!</td>
-                        </tr>
-                        <tr>
-                        <td>Veritatis!</td>
-                        <td>Facilis.</td>
-                        <td>Expedita?</td>
-                        <td>Ipsam!</td>
-                        <td>Omnis!</td>
-                        </tr>
-                        <tr>
-                        <td>Vitae.</td>
-                        <td>Cumque.</td>
-                        <td>Repudiandae.</td>
-                        <td>Ut?</td>
-                        <td>Sed!</td>
-                        </tr>
-                        <tr>
-                        <td>Accusantium.</td>
-                        <td>Adipisci.</td>
-                        <td>Sit.</td>
-                        <td>Maxime.</td>
-                        <td>Harum.</td>
-                        </tr>
-                        <tr>
-                        <td>Quas!</td>
-                        <td>Velit.</td>
-                        <td>Quisquam?</td>
-                        <td>Rerum?</td>
-                        <td>Iusto?</td>
-                        </tr>
-                        <tr>
-                        <td>Voluptates!</td>
-                        <td>Fugiat?</td>
-                        <td>Alias.</td>
-                        <td>Doloribus.</td>
-                        <td>Veritatis.</td>
-                        </tr>
-                        <tr>
-                        <td>Maiores.</td>
-                        <td>Ab.</td>
-                        <td>Accusantium.</td>
-                        <td>Ullam!</td>
-                        <td>Eveniet.</td>
-                        </tr>
-                        <tr>
-                        <td>Hic.</td>
-                        <td>Id!</td>
-                        <td>Officiis.</td>
-                        <td>Modi!</td>
-                        <td>Obcaecati.</td>
-                        </tr>
-                        <tr>
-                        <td>Soluta.</td>
-                        <td>Ad!</td>
-                        <td>Impedit.</td>
-                        <td>Alias!</td>
-                        <td>Ad.</td>
-                        </tr>
-                        <tr>
-                        <td>Expedita.</td>
-                        <td>Quo.</td>
-                        <td>Exercitationem!</td>
-                        <td>Optio?</td>
-                        <td>Ipsum?</td>
-                        </tr>
-                        <tr>
-                        <td>Commodi!</td>
-                        <td>Rem.</td>
-                        <td>Aspernatur.</td>
-                        <td>Accusantium!</td>
-                        <td>Maiores.</td>
-                        </tr>
-                        <tr>
-                        <td>Omnis.</td>
-                        <td>Cumque?</td>
-                        <td>Eveniet!</td>
-                        <td>Mollitia?</td>
-                        <td>Vero.</td>
-                        </tr>
-                        <tr>
-                        <td>Error!</td>
-                        <td>Inventore.</td>
-                        <td>Quasi!</td>
-                        <td>Ducimus.</td>
-                        <td>Repudiandae!</td>
-                        </tr>
-                        <tr>
-                        <td>Dolores!</td>
-                        <td>Necessitatibus.</td>
-                        <td>Corrupti!</td>
-                        <td>Eum.</td>
-                        <td>Sunt!</td>
-                        </tr>
-                        <tr>
-                        <td>Ea.</td>
-                        <td>Culpa?</td>
-                        <td>Quam?</td>
-                        <td>Nemo!</td>
-                        <td>Sit!</td>
-                        </tr>
-                        <tr>
-                        <td>Veritatis!</td>
-                        <td>Facilis.</td>
-                        <td>Expedita?</td>
-                        <td>Ipsam!</td>
-                        <td>Omnis!</td>
-                        </tr>
-                        <tr>
-                        <td>Vitae.</td>
-                        <td>Cumque.</td>
-                        <td>Repudiandae.</td>
-                        <td>Ut?</td>
-                        <td>Sed!</td>
-                        </tr>
-                        <tr>
-                        <td>Accusantium.</td>
-                        <td>Adipisci.</td>
-                        <td>Sit.</td>
-                        <td>Maxime.</td>
-                        <td>Harum.</td>
-                        </tr>
-                        <tr>
-                        <td>Quas!</td>
-                        <td>Velit.</td>
-                        <td>Quisquam?</td>
-                        <td>Rerum?</td>
-                        <td>Iusto?</td>
-                        </tr>
-                        <tr>
-                        <td>Voluptates!</td>
-                        <td>Fugiat?</td>
-                        <td>Alias.</td>
-                        <td>Doloribus.</td>
-                        <td>Veritatis.</td>
-                        </tr>
-                        <tr>
-                        <td>Maiores.</td>
-                        <td>Ab.</td>
-                        <td>Accusantium.</td>
-                        <td>Ullam!</td>
-                        <td>Eveniet.</td>
-                        </tr>
-                        <tr>
-                        <td>Hic.</td>
-                        <td>Id!</td>
-                        <td>Officiis.</td>
-                        <td>Modi!</td>
-                        <td>Obcaecati.</td>
-                        </tr>
-                        <tr>
-                        <td>Soluta.</td>
-                        <td>Ad!</td>
-                        <td>Impedit.</td>
-                        <td>Alias!</td>
-                        <td>Ad.</td>
-                        </tr>
-                        <tr>
-                        <td>Expedita.</td>
-                        <td>Quo.</td>
-                        <td>Exercitationem!</td>
-                        <td>Optio?</td>
-                        <td>Ipsum?</td>
-                        </tr>
-                        <tr>
-                        <td>Commodi!</td>
-                        <td>Rem.</td>
-                        <td>Aspernatur.</td>
-                        <td>Accusantium!</td>
-                        <td>Maiores.</td>
-                        </tr>
-                        <tr>
-                        <td>Omnis.</td>
-                        <td>Cumque?</td>
-                        <td>Eveniet!</td>
-                        <td>Mollitia?</td>
-                        <td>Vero.</td>
-                        </tr>
-                        <tr>
-                        <td>Error!</td>
-                        <td>Inventore.</td>
-                        <td>Quasi!</td>
-                        <td>Ducimus.</td>
-                        <td>Repudiandae!</td>
-                        </tr>
-                        <tr>
-                        <td>Dolores!</td>
-                        <td>Necessitatibus.</td>
-                        <td>Corrupti!</td>
-                        <td>Eum.</td>
-                        <td>Sunt!</td>
-                        </tr>
-                        <tr>
-                        <td>Ea.</td>
-                        <td>Culpa?</td>
-                        <td>Quam?</td>
-                        <td>Nemo!</td>
-                        <td>Sit!</td>
-                        </tr>
-                        <tr>
-                        <td>Veritatis!</td>
-                        <td>Facilis.</td>
-                        <td>Expedita?</td>
-                        <td>Ipsam!</td>
-                        <td>Omnis!</td>
-                        </tr>
-                        <tr>
-                        <td>Vitae.</td>
-                        <td>Cumque.</td>
-                        <td>Repudiandae.</td>
-                        <td>Ut?</td>
-                        <td>Sed!</td>
-                        </tr>
-                        <tr>
-                        <td>Accusantium.</td>
-                        <td>Adipisci.</td>
-                        <td>Sit.</td>
-                        <td>Maxime.</td>
-                        <td>Harum.</td>
-                        </tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        <tr>
+                            <td className="number">1</td>
+                            <td className="title">Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka</td>
+                            <td className="rating">10</td>
+                            <td className="status">Plan to Watch</td>
+                            <td className="progression">5156/2180 <span className="plus-button glyphicon glyphicon-plus-sign"/></td>
+                            <td className="type">Film</td>
+                            <td className="genres">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="tags">Joe, Mama, Joe, Deez Nuts, Borger, Camel</td>
+                            <td className="notes">Dessert toffee wafer icing chocolate. Pastry gingerbread jelly-o dragée halvah macaroon danish cake. Sweet caramels halvah oat cake fruitcake. Dragée sweet pastry fruitcake tiramisu chocolate cake.</td>
+                        </tr>
+                        
                     </tbody>
                     </table>
             </div>

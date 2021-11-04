@@ -18,6 +18,7 @@
 }
 #title-and-phrase > #title {
     font-size: 48px;
+    font-weight: bold;
     margin-bottom: 0px;
 }
 #title-and-phrase > #phrase {
@@ -119,7 +120,7 @@
 
 #reg-conditions {
     position: absolute;
-    bottom: -175px;
+    bottom: -160px;
     max-width: 400px;
     text-align: left;
     font-size: 15px;
@@ -200,6 +201,8 @@
     height: 0.1%;
     background-color: rgb(163, 163, 163);
     border: none;
+    margin-bottom: 17px;
+    margin-top: 13px;
 }
 
 #no-account {

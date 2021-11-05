@@ -232,7 +232,7 @@ const List = (props) => {
     /* ----------------------------- light/dark mode ---------------------------- */
     const [modeButtonValue, setModeButtonValue] = useState(cookies.mode ? (cookies.mode === "dark" ? "Light Mode" : "Dark Mode") : "Dark Mode");
     const toggleDarkMode = () => {
-        if(!cookies.mode || cookies.mode === "dark") {
+        if(cookies.mode && cookies.mode === "dark") {
             setCookie("mode", "light");
             props.updateDarkMode("light");
             setModeButtonValue("Dark Mode");

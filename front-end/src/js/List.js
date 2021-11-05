@@ -32,13 +32,13 @@ const List = (props) => {
     ]
     const [status, setStatus] = useState("Everything");
     const handleSelect = value => {
-        console.log(value.value);
         setStatus(value.value);
     }
     const customStyles = {
         control: styles => ({
             ...styles,
-            background: "rgba(255, 255, 255, 0.2)",
+            color: "white",
+            background: "rgba(255, 255, 255, 0.8)",
         }),
         menu: (provided, state) => ({
           ...provided,
@@ -47,9 +47,10 @@ const List = (props) => {
         }),
         option: (styles, { isDisabled, isFocused, isSelected }) => ({
             ...styles,
+            cursor: isFocused ? "pointer" : "auto",
             color: isSelected ? "white" : "black",
             fontWeight: isSelected ? "bold" : "normal",
-            backgroundColor: isSelected ? "#29af00" : isFocused ? "#f0ffeb" : "rgba(255, 255, 255, 0.69)",
+            backgroundColor: isSelected ? "#2dc000e5" : isFocused ? "#e4ffdcb9" : "rgba(255, 255, 255, 0.8)",
             ':active': {
                 ...styles[':active'],
                 backgroundColor: !isDisabled
@@ -70,19 +71,7 @@ const List = (props) => {
         },
     })
     
-    const dummyList = [
-        {
-            title: "Amagi Brilliant Park",               //name of entry
-            rating: 8,             //user rating from 0.0 to 10.0
-            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: 13,  //number of episodes user has watched
-            episodesTotal: 13,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
-            tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
-            dateAdded: new Date()             //date this entry was added
-        },
+    const [list, modifyList] = useState([
         {
             title: "Wotakoi",               //name of entry
             rating: 7,             //user rating from 0.0 to 10.0
@@ -132,6 +121,18 @@ const List = (props) => {
             dateAdded: new Date()             //date this entry was added
         },
         {
+            title: "Amagi Brilliant Park",               //name of entry
+            rating: 8,             //user rating from 0.0 to 10.0
+            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+            episodesCompleted: 13,  //number of episodes user has watched
+            episodesTotal: 13,      //total episodes for this media
+            type: "TV",               //type of media, e.g. film
+            genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
+            tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
+            notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
+            dateAdded: new Date()             //date this entry was added
+        },
+        {
             title: "Baccano",               //name of entry
             rating: null,             //user rating from 0.0 to 10.0
             status: "Plan To Watch",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
@@ -143,28 +144,105 @@ const List = (props) => {
             notes: null,
             dateAdded: new Date()             //date this entry was added
         },
-    ]
+    ]);
 
     /* ------------------------------ sorting list ------------------------------ */
-    //status
-    const sortByStatus = () => () => {
+    //title
+    const sortByTitle = () => {
+        const reverse = ascending[0] ? 1 : -1;
+        list.sort((a, b) => reverse * ((a.title > b.title) ? -1 : 1));
+    }
+    //rating
+    const sortByRating = () => {
+        const reverse = ascending[1] ? 1 : -1;
+        sortByTitle(); //sort by alpha first
+        list.sort((a, b) => {
+            if(!a.rating && !b.rating) {
+                return 0;
+            }
+            return reverse * ((a.rating > b.rating) ? 1 : -1);
+        });
+    }
+    //status (default)
+    const sortByStatus = () => {
+        const reverse = ascending[2] ? 1 : -1;
+        sortByTitle(); //sort by alpha first
         const statusOrder = ["Watching","Completed","On Hold","Dropped","Plan to Watch"];
         const orderForIndexVals = statusOrder.slice(0).reverse();
-        dummyList.sort((first, second) => {
+        list.sort((first, second) => {
             const aIndex = -orderForIndexVals.indexOf(first.status);
             const bIndex = -orderForIndexVals.indexOf(second.status);
-            return aIndex - bIndex;
+            return reverse * (aIndex - bIndex);
+        });
+    }
+    //progress
+    const sortByProgress = () => {
+        const reverse = ascending[3] ? 1 : -1;
+        sortByTitle(); //sort by alpha first
+        list.sort((a, b) => {
+            if(!a.episodesCompleted && !b.episodesCompleted) {
+                return 0;
+            }
+            return reverse * ((a.episodesCompleted > b.episodesCompleted) ? 1 : -1);
         });
     }
 
-    const [sortListFunction, setSortListFunction] = useState(sortByStatus);
+    const sortFunctions = {
+        "title" : sortByTitle,
+        "status" : sortByStatus,
+        "rating" : sortByRating,
+        "progress" : sortByProgress
+    }
+    const [sortBy, setSortBy] = useState("status");
+    const [ascending, setAscending] = useState([true,true,true,true]);
+
+    const clearArrowsExcept = n => {
+        const arrows = document.getElementsByClassName("arrow");
+        for (let i = 0; i < arrows.length; i++) {
+            if (i !== n)
+                arrows[i].style.display = "none";
+        }
+    }
+
+    const handleTitleSort = () => {
+        clearArrowsExcept(0);
+        setAscending([!ascending[0], true, true, true]);
+        setSortBy("title");
+        const arrowSpan = document.getElementsByClassName("arrow")[0];
+        arrowSpan.style.display = "inline";
+        arrowSpan.innerHTML = ascending[0] ? "&#8593;" : "&#8595";
+    }
+    const handleRatingSort = () => {
+        clearArrowsExcept(1);
+        setAscending([true, !ascending[1], true, true]);
+        setSortBy("rating");
+        const arrowSpan = document.getElementsByClassName("arrow")[1];
+        arrowSpan.style.display = "inline";
+        arrowSpan.innerHTML = ascending[1] ? "&#8593;" : "&#8595";
+    }
+    const handleStatusSort = () => {
+        clearArrowsExcept(2);
+        setAscending([true, true, !ascending[2], true]);
+        setSortBy("status");
+        const arrowSpan = document.getElementsByClassName("arrow")[2];
+        arrowSpan.style.display = "inline";
+        arrowSpan.innerHTML = !ascending[2] ? "&#8593;" : "&#8595";
+    }
+    const handleProgressSort = () => {
+        clearArrowsExcept(3);
+        setAscending([true, true, true, !ascending[3]]);
+        setSortBy("progress");
+        const arrowSpan = document.getElementsByClassName("arrow")[3];
+        arrowSpan.style.display = "inline";
+        arrowSpan.innerHTML = ascending[3] ? "&#8593;" : "&#8595";
+    }
 
     /* ------------------------------- list items ------------------------------- */
     const generateEntries = () => {
-        sortListFunction();
+        sortFunctions[sortBy]();
         return ( 
             <tbody>
-                {dummyList.filter(entry => {
+                {list.filter(entry => {
                     if (!entry.title.toLowerCase().includes(searchCriteria.toLowerCase()))
                         return false;
                     if (status !== "Everything" && entry.status !== status)
@@ -213,11 +291,8 @@ const List = (props) => {
     const handleIncrement = () => {
         console.log("handle increment"); //TODO
     }
-    const [entries, setEntries] = useState(generateEntries());
-    useEffect(() => {
-        setEntries(generateEntries());
-    }, [status, searchCriteria, sortListFunction]); // eslint-disable-line react-hooks/exhaustive-deps
-
+    const entries = generateEntries(status, searchCriteria);
+    
     /* --------------------------------- logout --------------------------------- */
     const logout = async () => {
         await axios({
@@ -245,7 +320,7 @@ const List = (props) => {
     }
     useEffect(() => {
         props.updateDarkMode(cookies.mode);
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
@@ -265,7 +340,7 @@ const List = (props) => {
                             <input className="button" id="toggle-mode" type="button" value={modeButtonValue}
                                 onClick={toggleDarkMode}
                             />
-                            <input className="button" id="logout" type="button" value="Sign Out" 
+                            <input className="button" id="sign-out" type="button" value="Sign Out" 
                                 onMouseEnter={e=>{e.target.value = "(´^ω^)ノ"}} onMouseLeave={e=>{e.target.value = "Sign Out"}}
                                 onClick={()=>logout()}
                             />
@@ -285,15 +360,15 @@ const List = (props) => {
                 <table className="table">
                     <thead>
                         <tr className="sticky" id="info-header">
-                            <th className="number button"># &#8595;</th>
-                            <th className="title button">Title &#8593;</th>
-                            <th className="rating button">Rating &#8595;</th>
-                            <th className="status button">Status &#8593;</th>
-                            <th className="progression-header button">Progress &#8595;</th>
-                            <th className="type button">Type &#8593;</th>
-                            <th className="genres button">Genres &#8595;</th>
-                            <th className="tags button">Tags &#8593;</th>
-                            <th className="notes button">Notes &#8595;</th>
+                            <th id="number-header" className="number">#</th>
+                            <th className="title button" onClick={handleTitleSort}><span id="title-header">Title</span> <span className="arrow"></span></th>
+                            <th className="rating button" onClick={handleRatingSort}><span id="rating-header">Rating</span> <span className="arrow"></span></th>
+                            <th className="status button" onClick={handleStatusSort}><span id="status-header">Status</span> <span className="arrow"></span></th>
+                            <th className="progression-header button" onClick={handleProgressSort}><span id="progress-header">Progress</span> <span className="arrow"></span></th>
+                            <th id="type-header" className="type">Type</th>
+                            <th id="genres-header" className="genres">Genres</th>
+                            <th id="tags-header" className="tags">Tags</th>
+                            <th id="notes-header" className="notes">Notes</th>
                         </tr>
                     </thead>
                     {entries}

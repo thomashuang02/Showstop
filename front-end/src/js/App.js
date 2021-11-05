@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import '../css/App.css';
 import Login from './Login';
@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 
 const App = (props) => {
   const [user, setUser] = useState(null);
-  const [cookies, setCookie] = useCookies(["mode"]);
+  const [cookies] = useCookies(["mode"]);
 
   /* --------------------- updating dark mode from cookies -------------------- */
   const updateDarkMode = (mode) => {

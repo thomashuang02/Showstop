@@ -65,7 +65,7 @@ const Login = (props) => {
                 console.log("Successfully authenticated.");
             } else {
                 console.log("Authentication unsuccessful.");
-                setError("Can't find that user/password combo.")
+                setError("Can't find that user/password combo.");
             }
         });
         getUser();
@@ -100,6 +100,9 @@ const Login = (props) => {
             });
             getUser();
         }
+        else {
+            setError("Please fulfill all four conditions.")
+        }
     }
     
     /* ---------------------------- update dark mode ---------------------------- */
@@ -117,6 +120,7 @@ const Login = (props) => {
             setRegisterConfirmPassword("");
             setLoginUsername("");
             setLoginPassword("");
+            setError("");
         }
         else {
             setState("login");
@@ -125,6 +129,7 @@ const Login = (props) => {
             setRegisterUsername("");
             setRegisterPassword("");
             setRegisterConfirmPassword("");
+            setError("");
         }
     }
     const displayForm = () => {

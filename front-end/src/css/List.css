@@ -21,7 +21,7 @@
 
 /* ------------------------------- main header ------------------------------ */
 #main-header {
-    margin: 30px auto 10px auto;
+    margin: 40px auto 10px auto;
     display: flex;
     flex-direction: row;
     width: 100vw;
@@ -55,31 +55,28 @@
     margin: 0;
     font-size: 35px;
 }
-#logo {
-    margin-right: 3vw;
-}
-#logout {
-    width: 85px;
+#sign-out {
+    width: 95px;
     font-weight: bold;
     border-radius: 6px;
-    padding: 8px;
+    padding: 7px;
     border: 1px solid #2ab300;
     margin-right: 3vw;
+    margin-left: 8px;
 }
 #toggle-mode {
     width: 95px;
     font-weight: bold;
     border-radius: 6px;
-    padding: 8px;
+    padding: 7px;
     border: 1px solid #2ab300;
-    margin-right: 8px;
 }
 
 /* --------------------------------- toolbar -------------------------------- */
 #toolbar {
     display: flex;
     flex-direction: row;
-    height: 70px;
+    height: 90px;
     min-width: 590px;
     margin: auto;
     align-items: center;
@@ -159,11 +156,20 @@
     height: 35px;
     font-size: 15px;
 }
+.arrow {
+    display: none;
+}
 
 /* ------------------------------ list columns ------------------------------ */
+#title-header, #rating-header, #status-header, #progress-header {
+    text-decoration: underline;
+}
 .number {
-    width: 60px;
+    width: 40px;
     text-align: center;
+}
+#number-header, #type-header, #genres-header, #tags-header, #notes-header {
+    color: #2cbe00;
 }
 .title {
     width: auto;
@@ -171,38 +177,38 @@
     font-weight: bold;
 }
 .rating {
-    width: 120px;
+    width: 90px;
     text-align: center;
 }
 .status {
-    width: 120px;
+    width: 110px;
     text-align: center;
 }
 .progression-header {
-    width: 120px;
+    width: 100px;
     text-align: center;
 }
 .progression {
     width: 120px;
     text-align: right;
-    padding-right: 45px !important;
+    padding-right: 32px !important;
 }
 .type {
     width: 120px;
     text-align: center;
 }
 .genres {
-    width: 350px;
+    width: 325px;
     text-align: left;
     padding-left: 10px;
 }
 .tags {
-    width: 350px;
+    width: 325px;
     text-align: left;
     padding-left: 10px;
 }
 .notes {
-    width: 500px;
+    width: 600px;
     text-align: left;
     padding-left: 10px;
 }
@@ -328,6 +334,9 @@
     #main-header #list-name {
         font-size: 22px;
     }
+    #toggle-mode {
+        display: none;
+    }
     .status {
         display: none;
     }
@@ -340,6 +349,9 @@
         margin-left: 10px;
     }
     #main-header #add-entry-button {
+        margin-right: 10px;
+    }
+    #main-header #sign-out {
         margin-right: 10px;
     }
     .table {

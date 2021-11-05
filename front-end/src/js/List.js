@@ -2,9 +2,12 @@ import {React, useEffect, useState} from 'react';
 import { Redirect } from 'react-router-dom';
 import Select from 'react-select'
 import '../css/List.css';
+import axios from 'axios';
+import { useCookies } from "react-cookie";
 
 const List = (props) => {
-    const user = props.user;
+    const [user, setUser] =[props.user, props.setUser];
+    const [cookies, setCookie] = useCookies(["mode"]);
     useEffect(() => {
         if(user) {
             document.title = `${user.username}'s List`;
@@ -33,20 +36,25 @@ const List = (props) => {
         setStatus(value.value);
     }
     const customStyles = {
+        control: styles => ({
+            ...styles,
+            background: "rgba(255, 255, 255, 0.2)",
+        }),
         menu: (provided, state) => ({
           ...provided,
           zIndex: 2,
+          background: "rgba(177, 177, 177, 0.2)"
         }),
-        option: (provided, state) => ({
-            ...provided,
-            color: state.isSelected ? "white" : "#29af00",
-            fontWeight: state.isSelected ? "bold" : "normal",
-            backgroundColor: state.isSelected ? "#29af00" : state.isFocused ? "#f0ffeb" : "white",
+        option: (styles, { isDisabled, isFocused, isSelected }) => ({
+            ...styles,
+            color: isSelected ? "white" : "black",
+            fontWeight: isSelected ? "bold" : "normal",
+            backgroundColor: isSelected ? "#29af00" : isFocused ? "#f0ffeb" : "rgba(255, 255, 255, 0.69)",
             ':active': {
-                ...provided[':active'],
-                backgroundColor: !state.isDisabled
-                  ? state.isSelected
-                    ? "white"
+                ...styles[':active'],
+                backgroundColor: !isDisabled
+                  ? isSelected
+                    ? "rgba(255, 255, 255, 0.69)"
                     : "#bbebab"
                   : undefined,
             },
@@ -136,6 +144,21 @@ const List = (props) => {
             dateAdded: new Date()             //date this entry was added
         },
     ]
+
+    /* ------------------------------ sorting list ------------------------------ */
+    //status
+    const sortByStatus = () => () => {
+        const statusOrder = ["Watching","Completed","On Hold","Dropped","Plan to Watch"];
+        const orderForIndexVals = statusOrder.slice(0).reverse();
+        dummyList.sort((first, second) => {
+            const aIndex = -orderForIndexVals.indexOf(first.status);
+            const bIndex = -orderForIndexVals.indexOf(second.status);
+            return aIndex - bIndex;
+        });
+    }
+
+    const [sortListFunction, setSortListFunction] = useState(sortByStatus);
+
     /* ------------------------------- list items ------------------------------- */
     const generateEntries = () => {
         sortListFunction();
@@ -190,20 +213,40 @@ const List = (props) => {
     const handleIncrement = () => {
         console.log("handle increment"); //TODO
     }
+    const [entries, setEntries] = useState(generateEntries());
+    useEffect(() => {
+        setEntries(generateEntries());
+    }, [status, searchCriteria, sortListFunction]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    /* ------------------------------ sorting list ------------------------------ */
-    //status
-    const sortByStatus = () => () => {
-        const statusOrder = ["Watching","Completed","On Hold","Dropped","Plan to Watch"];
-        const orderForIndexVals = statusOrder.slice(0).reverse();
-        dummyList.sort((first, second) => {
-            const aIndex = -orderForIndexVals.indexOf(first.status);
-            const bIndex = -orderForIndexVals.indexOf(second.status);
-            return aIndex - bIndex;
+    /* --------------------------------- logout --------------------------------- */
+    const logout = async () => {
+        await axios({
+            method: "GET",
+            withCredentials: true,
+            url: "/logout"
+        }).then(() => {
+            setUser(null);
         });
     }
 
-    const [sortListFunction, setSortListFunction] = useState(sortByStatus);
+    /* ----------------------------- light/dark mode ---------------------------- */
+    const [modeButtonValue, setModeButtonValue] = useState(cookies.mode ? (cookies.mode === "dark" ? "Light Mode" : "Dark Mode") : "Dark Mode");
+    const toggleDarkMode = () => {
+        if(!cookies.mode || cookies.mode === "dark") {
+            setCookie("mode", "light");
+            props.updateDarkMode("light");
+            setModeButtonValue("Dark Mode");
+        }
+        else {
+            setCookie("mode", "dark");
+            props.updateDarkMode("dark");
+            setModeButtonValue("Light Mode");
+        }
+    }
+    useEffect(() => {
+        props.updateDarkMode(cookies.mode);
+    }, []);
+
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
         return (
@@ -219,7 +262,13 @@ const List = (props) => {
                     </div>
                     <div className="right">
                         <div id="logo">
-                            logo here
+                            <input className="button" id="toggle-mode" type="button" value={modeButtonValue}
+                                onClick={toggleDarkMode}
+                            />
+                            <input className="button" id="logout" type="button" value="Sign Out" 
+                                onMouseEnter={e=>{e.target.value = "(´^ω^)ノ"}} onMouseLeave={e=>{e.target.value = "Sign Out"}}
+                                onClick={()=>logout()}
+                            />
                         </div>
                     </div>
                 </div>
@@ -247,13 +296,13 @@ const List = (props) => {
                             <th className="notes button">Notes &#8595;</th>
                         </tr>
                     </thead>
-                    {generateEntries()}
+                    {entries}
                     </table>
             </div>
         );
     }
     else {
-        return (<Redirect to="/" />)
+        return (<Redirect push to="/" />)
     }
 }
 

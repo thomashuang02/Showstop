@@ -72,6 +72,7 @@ app.post("/register", (req, res, next) => {
             const newUser = new User({
                 username: req.body.username,
                 password: hashedPassword,
+                list: []
             });
             await newUser.save();
             authenticate(req, res, next);
@@ -80,6 +81,10 @@ app.post("/register", (req, res, next) => {
 });
 app.get("/user", (req, res) => {
     res.send(req.user);
+});
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
 });
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../front-end/build/index.html'));

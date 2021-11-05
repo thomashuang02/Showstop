@@ -2,13 +2,20 @@ import {React, useEffect, useState} from 'react';
 import '../css/Login.css';
 import { Redirect } from "react-router-dom"
 import axios from 'axios';
+import Typewriter from './Typewriter';
+import { useCookies } from "react-cookie";
 
 const Login = (props) => {
     const [user, setUser] = [props.user, props.setUser];
+    const [cookies] = useCookies(["mode"]);
     
     useEffect(() => {
         document.title = "Showstop";
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    /* -------------------- importing typewriter text script -------------------- */
+    useEffect(() => {
+        Typewriter();
+    }, []);
     
     /* ------------------------ rotating through wordbank ----------------------- */
     const wordBank = ['watch','will watch','watched']
@@ -95,6 +102,11 @@ const Login = (props) => {
         }
     }
     
+    /* ---------------------------- update dark mode ---------------------------- */
+    useEffect(() => {
+        props.updateDarkMode(cookies.mode);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     /* -------------------- toggling login/registration forms ------------------- */
     const [state, setState] = useState("login");
     const toggleState = () => {
@@ -132,6 +144,10 @@ const Login = (props) => {
         )
     }
     const registerForm = () => {
+        let conditionSatisfiedColor = "black";
+        if(cookies.mode && cookies.mode === "dark") {
+            conditionSatisfiedColor = "white";
+        }
         return (
             <div id="form">
                 { error && <p id="error" className="animate-flicker">{error}</p>}
@@ -142,7 +158,7 @@ const Login = (props) => {
                 <button id="back-to-login" onClick={toggleState}>Back to login</button>
                 {/* &#10006; cross, &#x2714; check */}
                 <div id="reg-conditions">{regConditions.map((condition, i) => 
-                    <p className="reg-condition" style={condition.satisfied ? {"color":"black"} : {"color":"gray"}} key={i}>{
+                    <p className="reg-condition" style={condition.satisfied ? {"color":conditionSatisfiedColor} : {"color":"gray"}} key={i}>{
                         condition.satisfied ? <span className="check">&#x2714;</span> : <span className="X">&#10006;</span>
                         } {condition.message}
                     </p>
@@ -158,18 +174,6 @@ const Login = (props) => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
     /* ----------------------- enter keydown submit login ----------------------- */
-    useEffect(() => {
-        const listener = event => {
-            if (event.code === "Enter" || event.code === "NumpadEnter") {
-            console.log("Enter key was pressed. Run your function.");
-            // callMyFunction();
-            }
-        };
-        document.addEventListener("keydown", listener);
-        return () => {
-            document.removeEventListener("keydown", listener);
-        };
-    }, []);
     const onKeyDown = event => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -177,17 +181,6 @@ const Login = (props) => {
             handleLogin();
         }
     }
-
-    /* -------------------- importing typewriter text script -------------------- */
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = "./scripts/Typewriter.js";
-        script.async = true;
-        document.body.appendChild(script);
-        return () => {
-          document.body.removeChild(script);
-        }
-      }, []);
 
     /* ----------------------------------- jsx ---------------------------------- */
     if(!user) {

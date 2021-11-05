@@ -2,8 +2,8 @@
 
 /* ----------------------- epic gradient hover button ----------------------- */
 .button {
-    color: #29af00;
-    background-color: white;
+    color: #2cbe00;
+    background-color: transparent;
 }
 .button:hover {
     border: none;
@@ -16,7 +16,7 @@
     -o-animation: rainbow 4s ease infinite;
     animation: rainbow 4s ease infinite;
     cursor: pointer;
-    border: #32cc04;
+    border: #2cbe00;
 }
 
 /* ------------------------------- main header ------------------------------ */
@@ -58,6 +58,22 @@
 #logo {
     margin-right: 3vw;
 }
+#logout {
+    width: 85px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px;
+    border: 1px solid #2ab300;
+    margin-right: 3vw;
+}
+#toggle-mode {
+    width: 95px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px;
+    border: 1px solid #2ab300;
+    margin-right: 8px;
+}
 
 /* --------------------------------- toolbar -------------------------------- */
 #toolbar {
@@ -84,6 +100,7 @@
     border-top: 1px solid hsl(0, 0%, 80%);
     border-bottom: 1px solid hsl(0, 0%, 80%);
     padding: 8px;
+    background-color: transparent;
 }
 #basic-search:focus {
     outline: none !important;
@@ -122,11 +139,11 @@
 
 /* --------------------------- sticky info header --------------------------- */
 .sticky > th {
-    background: white;
     position: sticky;
     top: 0;
     border-bottom: 0px !important;
     z-index: 1;
+    background-color: transparent;
 }
 .sticky > th:after, th:before {
     content: '';

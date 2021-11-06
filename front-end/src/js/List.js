@@ -4,6 +4,7 @@ import Select from 'react-select'
 import '../css/List.css';
 import axios from 'axios';
 import { useCookies } from "react-cookie";
+import AddEntry from './overlays/AddEntry'
 
 const List = (props) => {
     const [user, setUser] =[props.user, props.setUser];
@@ -38,7 +39,8 @@ const List = (props) => {
         control: styles => ({
             ...styles,
             color: "white",
-            background: "rgba(255, 255, 255, 0.8)",
+            fontSize: "14px",
+            background: "rgba(255, 255, 255, 0.7)",
         }),
         menu: (provided, state) => ({
           ...provided,
@@ -50,7 +52,8 @@ const List = (props) => {
             cursor: isFocused ? "pointer" : "auto",
             color: isSelected ? "white" : "black",
             fontWeight: isSelected ? "bold" : "normal",
-            backgroundColor: isSelected ? "#2dc000e5" : isFocused ? "#e4ffdcb9" : "rgba(255, 255, 255, 0.8)",
+            fontSize: "14px",
+            backgroundColor: isSelected ? "#2dc000e5" : isFocused ? "#e4ffdcb9" : "rgba(255, 255, 255, 0.9)",
             ':active': {
                 ...styles[':active'],
                 backgroundColor: !isDisabled
@@ -272,16 +275,16 @@ const List = (props) => {
                         <td className="genres">
                             {entry.genres.length > 0 
                                 ? <span>{entry.genres.join(", ")}</span>
-                                : <span className="placeholder">No genres yet...</span>
+                                : <span className="dummy-text">No genres yet...</span>
                             }</td>
                         <td className="tags">
                             {entry.tags.length > 0 
                                 ? <span>{entry.tags.join(", ")}</span>
-                                : <span className="placeholder">No tags yet...</span>
+                                : <span className="dummy-text">No tags yet...</span>
                             }</td>
                         <td className="notes">{entry.notes && entry.notes.length > 0 
                                 ? <span>{entry.notes}</span>
-                                : <span className="placeholder">No notes yet...</span>
+                                : <span className="dummy-text">No notes yet...</span>
                             }</td>
                     </tr>
                 )}
@@ -322,6 +325,11 @@ const List = (props) => {
         props.updateDarkMode(cookies.mode);
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    /* -------------------------------- overlays -------------------------------- */
+    const [showAddEntry, setAddEntry] = useState(false)
+    const openAddEntry = () => setAddEntry(true)
+    const closeAddEntry = () => setAddEntry(false)
+
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
         return (
@@ -354,17 +362,19 @@ const List = (props) => {
                     <span id="search">
                         <input id="basic-search" type="text" placeholder="Search..." onChange={e => setSearchCriteria(e.target.value)}></input>
                         <input className="button" id="advanced-search" type="button" value="Advanced Search"/>
-                        <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"/>
+                        <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"
+                            onClick={() => openAddEntry()}
+                        />
                     </span>
                 </div>
                 <table className="table">
                     <thead>
                         <tr className="sticky" id="info-header">
                             <th id="number-header" className="number">#</th>
-                            <th className="title button" onClick={handleTitleSort}><span id="title-header">Title</span> <span className="arrow"></span></th>
-                            <th className="rating button" onClick={handleRatingSort}><span id="rating-header">Rating</span> <span className="arrow"></span></th>
-                            <th className="status button" onClick={handleStatusSort}><span id="status-header">Status</span> <span className="arrow"></span></th>
-                            <th className="progression-header button" onClick={handleProgressSort}><span id="progress-header">Progress</span> <span className="arrow"></span></th>
+                            <th className="title button header-border" onClick={handleTitleSort}><span id="title-header">Title</span> <span className="arrow"></span></th>
+                            <th className="rating button header-border" onClick={handleRatingSort}><span id="rating-header">Rating</span> <span className="arrow"></span></th>
+                            <th className="status button header-border" onClick={handleStatusSort}><span id="status-header">Status</span> <span className="arrow"></span></th>
+                            <th className="progression-header button header-border" onClick={handleProgressSort}><span id="progress-header">Progress</span> <span className="arrow"></span></th>
                             <th id="type-header" className="type">Type</th>
                             <th id="genres-header" className="genres">Genres</th>
                             <th id="tags-header" className="tags">Tags</th>
@@ -372,7 +382,8 @@ const List = (props) => {
                         </tr>
                     </thead>
                     {entries}
-                    </table>
+                </table>
+                <AddEntry show={showAddEntry} close={closeAddEntry}/>
             </div>
         );
     }

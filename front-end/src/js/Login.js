@@ -1,4 +1,4 @@
-import {React, useEffect, useState} from 'react';
+import {React, useEffect, useState, useRef} from 'react';
 import '../css/Login.css';
 import { Redirect } from "react-router-dom"
 import axios from 'axios';
@@ -41,7 +41,7 @@ const Login = (props) => {
     const [loginPassword, setLoginPassword] = useState("");
     //const PORT = 4000;
     //const api = `https://localhost:${PORT}`;
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const getUser = () => {
         axios({
             method: "GET",
@@ -51,6 +51,7 @@ const Login = (props) => {
             setUser(res.data);
         });
     }
+
     const handleLogin = async () => {
         await axios({
             method: "POST",
@@ -66,6 +67,7 @@ const Login = (props) => {
             } else {
                 console.log("Authentication unsuccessful.");
                 setError("Can't find that user/password combo.");
+                setShowError(true);
             }
         });
         getUser();
@@ -95,13 +97,15 @@ const Login = (props) => {
                     console.log('registered as', res);
                 }
                 else {
-                    setError("Sorry, that username's taken.")
+                    setError("Sorry, that username's taken.");
+                    setShowError(true);
                 }
             });
             getUser();
         }
         else {
             setError("Please fulfill all four conditions.")
+            setShowError(true);
         }
     }
     
@@ -120,7 +124,7 @@ const Login = (props) => {
             setRegisterConfirmPassword("");
             setLoginUsername("");
             setLoginPassword("");
-            setError("");
+            setShowError(false);
         }
         else {
             setState("login");
@@ -129,16 +133,18 @@ const Login = (props) => {
             setRegisterUsername("");
             setRegisterPassword("");
             setRegisterConfirmPassword("");
-            setError("");
+            setShowError(false);
         }
     }
     const displayForm = () => {
         return state === "register" ? registerForm() : loginForm();
     }
+    const [showError, setShowError] = useState(false);
+
     const loginForm = () => {
         return (
             <div id="form">
-                { error && <p id="error" className="animate-flicker">{error}</p>}
+                { showError && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setLoginUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)} onKeyDown={onKeyDown}></input>
                 <button id="login-button" onClick={handleLogin}>Log In</button>
@@ -155,7 +161,7 @@ const Login = (props) => {
         }
         return (
             <div id="form">
-                { error && <p id="error" className="animate-flicker">{error}</p>}
+                { showError && <p id="error" className="animate-flicker">{error}</p>}
                 <input type="text" name="username" placeholder="Username" onChange={e => setRegisterUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setRegisterPassword(e.target.value)}></input>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={e => setRegisterConfirmPassword(e.target.value)}></input>

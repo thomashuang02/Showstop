@@ -19,7 +19,7 @@
 #title-and-phrase > #title {
     font-size: 48px;
     font-weight: bold;
-    margin-bottom: 0px;
+    margin: 20px 0 20px 0;
 }
 #title-and-phrase > #phrase {
     font-size: 24px;
@@ -79,7 +79,8 @@
     align-items: center;
     box-shadow: 0 3px 5px 2px rgba(107, 107, 107, 0.342);
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.89);
+    background-color: rgba(255, 255, 255, 0.048);
+    border: 1.5px solid #d6d6d634;
 }
 
 #typewriter-text {
@@ -110,17 +111,20 @@
 
 #error {
     position: absolute;
-    top: -35px;
+    top: -42px;
     max-width: 400px;
     text-align: center;
-    color: red;
+    color: white;
+    background-color: rgba(255, 37, 37, 0.836);
+    padding: 2px 7px 2px 7px;
+    border-radius: 3px;
     margin: 0;
     font-size: 15px;
 }
 
 #reg-conditions {
     position: absolute;
-    bottom: -160px;
+    bottom: -180px;
     max-width: 400px;
     text-align: left;
     font-size: 15px;
@@ -140,22 +144,23 @@
 }
 .animate-flicker {
     opacity:1;
-    -webkit-animation: fadeIn 1.5s infinite alternate;
-    -moz-animation: fadeIn 1.5s infinite alternate;
-    -o-animation: fadeIn 1.5s infinite alternate;
-    animation: fadeIn 1.5s infinite alternate;
+    -webkit-animation: fadeIn 1.2s infinite alternate;
+    -moz-animation: fadeIn 1.2s infinite alternate;
+    -o-animation: fadeIn 1.2s infinite alternate;
+    animation: fadeIn 1.2s infinite alternate;
 }
 
 #form > input[type=text], #form > input[type=password] {
     font-size: 17px;
-    height: 35%;
+    height: 36%;
     margin: 8px 0;
     border-radius: 5px;
     padding-left: 10px;
     font-size: 16px;
     width: 95%;
-    border: 1.5px solid #d6d6d6;
-    color: black;
+    border: 1.5px solid #bebebe9a;
+    color: inherit !important;
+    background-color: rgba(255, 255, 255, 0.089);
 }
 #form > input[type=text]:focus, #form > input[type=password]:focus {
     outline: none;
@@ -181,7 +186,7 @@
 }
 
 #sign-up-button {
-    background-color: #a0a0a0;
+    background-color: #979797;
     color: white;
     font-size: 18px;
     border-radius: 5px;
@@ -202,14 +207,14 @@
     height: 0.1%;
     background-color: rgb(163, 163, 163);
     border: none;
-    margin-bottom: 17px;
-    margin-top: 13px;
+    margin-bottom: 18px;
+    margin-top: 15px;
 }
 
 #no-account {
     color: rgb(94, 94, 94);
     margin-bottom: 0px;
-    font-size: 14px;
+    font-size: 15px;
     text-rendering: optimizelegibility;
 }
 
@@ -257,14 +262,13 @@
         right: 0;
         margin-top: -30px;
         top: 80px;
-        flex: 0em;
     }
     #title-and-phrase, #form {
         position: relative;
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
     #title-and-phrase {
         width: 300px;
         top: 20px;

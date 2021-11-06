@@ -7,7 +7,7 @@ import { useCookies } from "react-cookie";
 import AddEntry from './overlays/AddEntry'
 
 const List = (props) => {
-    const [user, setUser] =[props.user, props.setUser];
+    const [user, setUser] = [props.user, props.setUser];
     const [cookies, setCookie] = useCookies(["mode"]);
     useEffect(() => {
         if(user) {
@@ -38,14 +38,13 @@ const List = (props) => {
     const customStyles = {
         control: styles => ({
             ...styles,
-            color: "white",
             fontSize: "14px",
             background: "rgba(255, 255, 255, 0.7)",
         }),
         menu: (provided, state) => ({
           ...provided,
           zIndex: 2,
-          background: "rgba(177, 177, 177, 0.2)"
+          background: "rgba(177, 177, 177, 0.2)",
         }),
         option: (styles, { isDisabled, isFocused, isSelected }) => ({
             ...styles,
@@ -53,7 +52,7 @@ const List = (props) => {
             color: isSelected ? "white" : "black",
             fontWeight: isSelected ? "bold" : "normal",
             fontSize: "14px",
-            backgroundColor: isSelected ? "#2dc000e5" : isFocused ? "#e4ffdcb9" : "rgba(255, 255, 255, 0.9)",
+            backgroundColor: isSelected ? "#2dc000e5" : isFocused ? "#e4ffdcdc" : "rgba(255, 255, 255, 0.9)",
             ':active': {
                 ...styles[':active'],
                 backgroundColor: !isDisabled
@@ -74,80 +73,82 @@ const List = (props) => {
         },
     })
     
-    const [list, modifyList] = useState([
-        {
-            title: "Wotakoi",               //name of entry
-            rating: 7,             //user rating from 0.0 to 10.0
-            status: "Watching",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: null,  //number of episodes user has watched
-            episodesTotal: 24,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "Good-ass show",
-            dateAdded: new Date()             //date this entry was added
-        },
-        {
-            title: "Sword Art Online",               //name of entry
-            rating: 7,             //user rating from 0.0 to 10.0
-            status: "Dropped",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: 12,  //number of episodes user has watched
-            episodesTotal: 24,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "Good-ass show",
-            dateAdded: new Date()             //date this entry was added
-        },
-        {
-            title: "Sakurasou No Pet Na Kanojo",               //name of entry
-            rating: 7,             //user rating from 0.0 to 10.0
-            status: "On Hold",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: 24,  //number of episodes user has watched
-            episodesTotal: 24,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "Good-ass show",
-            dateAdded: new Date()             //date this entry was added
-        },
-        {
-            title: "Angel Beats",               //name of entry
-            rating: 9,             //user rating from 0.0 to 10.0
-            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: 13,  //number of episodes user has watched
-            episodesTotal: 13,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-            tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "Good-ass show",
-            dateAdded: new Date()             //date this entry was added
-        },
-        {
-            title: "Amagi Brilliant Park",               //name of entry
-            rating: 8,             //user rating from 0.0 to 10.0
-            status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: 13,  //number of episodes user has watched
-            episodesTotal: 13,      //total episodes for this media
-            type: "TV",               //type of media, e.g. film
-            genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
-            tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
-            notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
-            dateAdded: new Date()             //date this entry was added
-        },
-        {
-            title: "Baccano",               //name of entry
-            rating: null,             //user rating from 0.0 to 10.0
-            status: "Plan To Watch",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-            episodesCompleted: null,  //number of episodes user has watched
-            episodesTotal: null,      //total episodes for this media
-            type: null,               //type of media, e.g. film
-            genres: [],           //list of genres
-            tags: [],             //tags, such as release year, director, actors/actresses, etc
-            notes: null,
-            dateAdded: new Date()             //date this entry was added
-        },
-    ]);
+    // const [list, modifyList] = useState([
+    //     {
+    //         title: "Wotakoi",               //name of entry
+    //         rating: 7,             //user rating from 0.0 to 10.0
+    //         status: "Watching",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: null,  //number of episodes user has watched
+    //         episodesTotal: 24,      //total episodes for this media
+    //         type: "TV",               //type of media, e.g. film
+    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: "Good-ass show",
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    //     {
+    //         title: "Sword Art Online",               //name of entry
+    //         rating: 7,             //user rating from 0.0 to 10.0
+    //         status: "Dropped",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: 12,  //number of episodes user has watched
+    //         episodesTotal: 24,      //total episodes for this media
+    //         type: "TV",               //type of media, e.g. film
+    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: "Good-ass show",
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    //     {
+    //         title: "Sakurasou No Pet Na Kanojo",               //name of entry
+    //         rating: 7,             //user rating from 0.0 to 10.0
+    //         status: "On Hold",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: 24,  //number of episodes user has watched
+    //         episodesTotal: 24,      //total episodes for this media
+    //         type: "TV",               //type of media, e.g. film
+    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: "Good-ass show",
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    //     {
+    //         title: "Angel Beats",               //name of entry
+    //         rating: 9,             //user rating from 0.0 to 10.0
+    //         status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: 13,  //number of episodes user has watched
+    //         episodesTotal: 13,      //total episodes for this media
+    //         type: "TV",               //type of media, e.g. film
+    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
+    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: "Good-ass show",
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    //     {
+    //         title: "Amagi Brilliant Park",               //name of entry
+    //         rating: 8,             //user rating from 0.0 to 10.0
+    //         status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: 13,  //number of episodes user has watched
+    //         episodesTotal: 13,      //total episodes for this media
+    //         type: "TV",               //type of media, e.g. film
+    //         genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
+    //         tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    //     {
+    //         title: "Baccano",               //name of entry
+    //         rating: null,             //user rating from 0.0 to 10.0
+    //         status: "Plan To Watch",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    //         episodesCompleted: null,  //number of episodes user has watched
+    //         episodesTotal: null,      //total episodes for this media
+    //         type: null,               //type of media, e.g. film
+    //         genres: [],           //list of genres
+    //         tags: [],             //tags, such as release year, director, actors/actresses, etc
+    //         notes: null,
+    //         dateAdded: new Date()             //date this entry was added
+    //     },
+    // ]);
+
+    const [list, modifyList] = useState([]);
 
     /* ------------------------------ sorting list ------------------------------ */
     //title
@@ -383,6 +384,7 @@ const List = (props) => {
                     </thead>
                     {entries}
                 </table>
+                { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
                 <AddEntry show={showAddEntry} close={closeAddEntry}/>
             </div>
         );

@@ -1,4 +1,4 @@
-import {React, useEffect, useState, useRef} from 'react';
+import {React, useEffect, useState} from 'react';
 import '../css/Login.css';
 import { Redirect } from "react-router-dom"
 import axios from 'axios';
@@ -143,8 +143,8 @@ const Login = (props) => {
 
     const loginForm = () => {
         return (
-            <div id="form">
-                { showError && <p id="error" className="animate-flicker">{error}</p>}
+            <div id="form" >
+                {showError ? <p id="error" className="animate-flicker">{error}</p> : null}
                 <input type="text" name="username" placeholder="Username" onChange={e => setLoginUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setLoginPassword(e.target.value)} onKeyDown={onKeyDown}></input>
                 <button id="login-button" onClick={handleLogin}>Log In</button>
@@ -161,13 +161,12 @@ const Login = (props) => {
         }
         return (
             <div id="form">
-                { showError && <p id="error" className="animate-flicker">{error}</p>}
+                {showError ? <p id="error" className="animate-flicker">{error}</p> : null}
                 <input type="text" name="username" placeholder="Username" onChange={e => setRegisterUsername(e.target.value)}></input>
                 <input type="password" name="password" placeholder="Password" onChange={e => setRegisterPassword(e.target.value)}></input>
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={e => setRegisterConfirmPassword(e.target.value)}></input>
                 <button id="login-button" onClick={handleRegister}>Sign Up</button>
                 <button id="back-to-login" onClick={toggleState}>Back to login</button>
-                {/* &#10006; cross, &#x2714; check */}
                 <div id="reg-conditions">{regConditions.map((condition, i) => 
                     <p className="reg-condition" style={condition.satisfied ? {"color":conditionSatisfiedColor} : {"color":"gray"}} key={i}>{
                         condition.satisfied ? <span className="check">&#x2714;</span> : <span className="X">&#10006;</span>
@@ -206,9 +205,7 @@ const Login = (props) => {
                         you <span id="typewriter-text"></span><div id="cursor"></div>
                     </h2>
                 </div>
-                <div id="form-container">
-                    {displayForm()}
-                </div>
+                {displayForm()}
             </div>
         );
     }

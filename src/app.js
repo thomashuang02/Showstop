@@ -32,9 +32,8 @@ app.use(passport.session());
 require('./passportConfig')(passport);
 
 /* ------------------------- connecting to database ------------------------- */
-const schemae = require('./db');
-const User = schemae.User;
-const Entry = schemae.Entry;
+const User = require('./models/UserAndEntry').User;
+const Entry = require('./models/UserAndEntry').Entry;
 mongoose.connect("mongodb+srv://thomashuang02:admin@users.vdifr.mongodb.net/users?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true

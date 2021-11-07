@@ -191,6 +191,10 @@
     padding-left: 10px;
     font-weight: bold;
 }
+.title-hover:hover {
+    cursor: pointer;
+    color: #2cbe00;
+}
 .rating {
     width: 90px;
     text-align: center;

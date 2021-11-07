@@ -33,7 +33,4 @@ const UserSchema = new mongoose.Schema({
     list: [EntrySchema] //list of media entries
 });
 
-module.exports = {
-    Entry: mongoose.model('Entry', EntrySchema),
-    User: mongoose.model('User', UserSchema),
-}
+module.exports = mongoose.model('User', UserSchema);

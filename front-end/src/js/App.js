@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import '../css/App.css';
 import Login from './Login';
@@ -21,7 +21,6 @@ const App = (props) => {
         body.style.color="black";
     }
   }
-
   return (
     <div className="App">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>

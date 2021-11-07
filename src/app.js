@@ -5,10 +5,10 @@ const morgan = require("morgan");
 const cors = require('cors');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bcrypt = require('bcryptjs');
+const connection = require("./dbConnection");
 const session = require('express-session');
-const mongoose = require('mongoose');
 
+/* ------------------------------- express app ------------------------------ */
 const app = express();
 
 /* ------------------------------- middleware ------------------------------- */
@@ -32,63 +32,22 @@ app.use(passport.session());
 require('./passportConfig')(passport);
 
 /* ------------------------- connecting to database ------------------------- */
-const User = require('./models/UserAndEntry').User;
-const Entry = require('./models/UserAndEntry').Entry;
-mongoose.connect("mongodb+srv://thomashuang02:admin@users.vdifr.mongodb.net/users?retryWrites=true&w=majority", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}, () => {
-    console.log("Mongoose is connected.");
-});
+// const User = require('./models/UserAndEntry').User;
+// const Entry = require('./models/UserAndEntry').Entry;
+connection();
 
-/* ----------------------------- authentication ----------------------------- */
-const authenticate = (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) throw err;
-        if (!user) res.send(false);
-        else {
-            req.logIn(user, err => {
-                if (err) throw err;
-                res.send(true);
-                console.log(req.user);
-            });
-        }
-    })(req, res, next);
-}
+/* -------------------------- authentication routes ------------------------- */
+const authenticationRoutes = require('./routes/authenticationRoutes');
+app.use("/api", authenticationRoutes);
 
-/* ----------------------------- route handlers ----------------------------- */
-app.post("/login", (req, res, next) => {
-    authenticate(req, res, next);
-});
-app.post("/register", (req, res, next) => {
-    User.findOne({username: req.body.username}, async (err, user) => {
-        if (err) throw err;
-        if (user) {
-            res.send(false);
-        }
-        else {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const newUser = new User({
-                username: req.body.username,
-                password: hashedPassword,
-                list: []
-            });
-            await newUser.save();
-            authenticate(req, res, next);
-        }
-    });
-});
-app.get("/user", (req, res) => {
-    res.send(req.user);
-});
-app.get("/logout", function(req, res){
-    req.logout();
-    res.redirect("/");
-});
+/* --------------------------- list action routes --------------------------- */
+const listRoutes = require('./routes/listRoutes');
+app.use("/api/list", listRoutes);
+
+/* ------------------------ default: send index.html ------------------------ */
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../front-end/build/index.html'));
 });
-/* --------------------------- end route handlers --------------------------- */
 
 //start server
 const PORT = process.env.PORT || 4000;

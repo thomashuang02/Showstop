@@ -46,7 +46,7 @@ const Login = (props) => {
         axios({
             method: "GET",
             withCredentials: true,
-            url: "/user"
+            url: "/api/user"
         }).then(res => {
             setUser(res.data);
         });
@@ -60,7 +60,7 @@ const Login = (props) => {
                 password: loginPassword,
             },
             withCredentials: true,
-            url: "/login"
+            url: "/api/login"
         }).then(res => {
             if(res.data) {
                 console.log("Successfully authenticated.");
@@ -91,7 +91,7 @@ const Login = (props) => {
                     password: registerPassword,
                 },
                 withCredentials: true,
-                url: "/register"
+                url: "/api/register"
             }).then(res => {
                 if(res.data) {
                     console.log('registered as', res);

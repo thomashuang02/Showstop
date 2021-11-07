@@ -4,7 +4,8 @@ import Select from 'react-select'
 import '../css/List.css';
 import axios from 'axios';
 import { useCookies } from "react-cookie";
-import AddEntry from './overlays/AddEntry'
+import AddEntry from './overlays/AddEntry';
+import {getList} from './ListServices';
 
 const List = (props) => {
     const [user, setUser] = [props.user, props.setUser];
@@ -73,82 +74,18 @@ const List = (props) => {
         },
     })
     
-    // const [list, modifyList] = useState([
-    //     {
-    //         title: "Wotakoi",               //name of entry
-    //         rating: 7,             //user rating from 0.0 to 10.0
-    //         status: "Watching",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: null,  //number of episodes user has watched
-    //         episodesTotal: 24,      //total episodes for this media
-    //         type: "TV",               //type of media, e.g. film
-    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: "Good-ass show",
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    //     {
-    //         title: "Sword Art Online",               //name of entry
-    //         rating: 7,             //user rating from 0.0 to 10.0
-    //         status: "Dropped",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: 12,  //number of episodes user has watched
-    //         episodesTotal: 24,      //total episodes for this media
-    //         type: "TV",               //type of media, e.g. film
-    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: "Good-ass show",
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    //     {
-    //         title: "Sakurasou No Pet Na Kanojo",               //name of entry
-    //         rating: 7,             //user rating from 0.0 to 10.0
-    //         status: "On Hold",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: 24,  //number of episodes user has watched
-    //         episodesTotal: 24,      //total episodes for this media
-    //         type: "TV",               //type of media, e.g. film
-    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: "Good-ass show",
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    //     {
-    //         title: "Angel Beats",               //name of entry
-    //         rating: 9,             //user rating from 0.0 to 10.0
-    //         status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: 13,  //number of episodes user has watched
-    //         episodesTotal: 13,      //total episodes for this media
-    //         type: "TV",               //type of media, e.g. film
-    //         genres: ["Action","Comedy","Drama","Supernatural"],           //list of genres
-    //         tags: ["P.A. Works","Kana Hanazawa"],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: "Good-ass show",
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    //     {
-    //         title: "Amagi Brilliant Park",               //name of entry
-    //         rating: 8,             //user rating from 0.0 to 10.0
-    //         status: "Completed",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: 13,  //number of episodes user has watched
-    //         episodesTotal: 13,      //total episodes for this media
-    //         type: "TV",               //type of media, e.g. film
-    //         genres: ["Comedy", "Drama", "Fantasy"],           //list of genres
-    //         tags: ["Isuzu Sento", "Seiya Kanie", "Latifa Fleuranza", "Sylphy", "Kyoto Animation"],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: "I remember this being a solid ecchi comedy that satisfied my horny teenage needs",
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    //     {
-    //         title: "Baccano",               //name of entry
-    //         rating: null,             //user rating from 0.0 to 10.0
-    //         status: "Plan To Watch",             //Plan to Watch, Watching, Completed, On Hold, or Dropped
-    //         episodesCompleted: null,  //number of episodes user has watched
-    //         episodesTotal: null,      //total episodes for this media
-    //         type: null,               //type of media, e.g. film
-    //         genres: [],           //list of genres
-    //         tags: [],             //tags, such as release year, director, actors/actresses, etc
-    //         notes: null,
-    //         dateAdded: new Date()             //date this entry was added
-    //     },
-    // ]);
-
     const [list, modifyList] = useState([]);
+    const refreshList = async () => {
+        try {
+            const response = await getList();
+            modifyList(response.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => {
+        refreshList();
+    }, []);
 
     /* ------------------------------ sorting list ------------------------------ */
     //title
@@ -254,9 +191,11 @@ const List = (props) => {
                     return true;
                 })
                 .map((entry, i) => 
-                    <tr key={i}>
+                    <tr key={entry._id}>
                         <td className="number">{i+1}</td>
-                        <td className="title">{entry.title}</td>
+                        <td className="title">
+                            <span className="title-hover" onClick={()=>alert(entry._id)}>{entry.title}</span>
+                            </td>
                         <td className="rating">
                             {entry.rating ? <span>{entry.rating}</span> : <span>&ndash;</span>}
                             </td>
@@ -385,7 +324,7 @@ const List = (props) => {
                     {entries}
                 </table>
                 { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
-                <AddEntry show={showAddEntry} close={closeAddEntry}/>
+                <AddEntry modifyList={modifyList} refreshList={refreshList} show={showAddEntry} close={closeAddEntry}/>
             </div>
         );
     }

@@ -162,10 +162,12 @@ module.exports = mongoose.model('User', UserSchema);
   * config in [passportConfig.js](./src/passportConfig.js?raw=true), authentication utilized in [authenticationRoutes.js](./src/routes/authenticationRoutes.js?raw=true)
 * (1 point) [axios](https://www.npmjs.com/package/axios) for promise-based HTTP requests on both the front- and back-end.
   * used at various points in the front-end to make requests to back-end, which uses it also to proxy those requests to MongoDB Atlas. 
+* (1 point) Responsive design.
+  * Both login and list pages adapt to changes in screen width, try messing around.
 * (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
   * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
-16 points total out of 8 required points.
+17 points total out of 8 required points.
 
 
 ## [Initial Main Project File](./src/app.js?raw=true) 

@@ -106,6 +106,7 @@ input, textarea, select {
     text-align: center;
     margin: auto;
     bottom: 39%;
+    left: 69px;
     font-size: 24px;
     font-weight: bold;
 }
@@ -187,4 +188,15 @@ input, textarea, select {
 }
 #favorite {
     margin-top: 15px;
+}
+
+#clear-rating {
+    position: relative;
+    left: 55px;
+    font-size: 12px;
+    text-decoration: underline;
+}
+#clear-rating:hover {
+    color: #32cc04;
+    cursor: pointer;
 }

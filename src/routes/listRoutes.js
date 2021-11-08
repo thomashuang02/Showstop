@@ -11,8 +11,8 @@ const commaSeparatedToArray = (str) => {
 const formatEntry = (requestBody) => {
     return {
         ...requestBody,
-        genres: commaSeparatedToArray(req.body.genres),
-        tags: commaSeparatedToArray(req.body.tags),
+        genres: commaSeparatedToArray(requestBody.genres),
+        tags: commaSeparatedToArray(requestBody.tags),
         dateAdded: Date.now()
     }
 }
@@ -37,6 +37,7 @@ router.post("/", (req, res) => {
         User.findOne({ '_id' : req.user._id }).then(user => {
             user.list.push(newEntry);
             user.save().then(() => {
+                console.log("success");
                 res.send(newEntry);
             });
         });

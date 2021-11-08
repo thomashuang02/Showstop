@@ -1,11 +1,12 @@
 import axios from "axios";
 
-export function getList() {
-    return axios.get("api/list");
+export function getList(source) {
+    return axios.get("api/list", {
+        cancelToken: source.token,
+    });
 }
 
 export function postEntry(entry) {
-    console.log(entry);
     return axios.post("api/list", entry);
 }
 

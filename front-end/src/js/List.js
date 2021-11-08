@@ -75,17 +75,24 @@ const List = (props) => {
     })
     
     const [list, modifyList] = useState([]);
-    const refreshList = async () => {
+    const refreshList = async (source) => {
         try {
-            const response = await getList();
+            const response = await getList(source);
             modifyList(response.data);
         } catch (err) {
             console.log(err);
         }
     }
+    const cancelToken = axios.CancelToken;
+    const source = cancelToken.source();
     useEffect(() => {
-        refreshList();
-    }, []);
+        if(user) {
+            refreshList(source);
+        }
+        return () => {
+            source.cancel("Get list request cancelled on cleanup.");
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     /* ------------------------------ sorting list ------------------------------ */
     //title
@@ -180,6 +187,7 @@ const List = (props) => {
 
     /* ------------------------------- list items ------------------------------- */
     const generateEntries = () => {
+        console.log("Generating");
         sortFunctions[sortBy]();
         return ( 
             <tbody>
@@ -195,6 +203,7 @@ const List = (props) => {
                         <td className="number">{i+1}</td>
                         <td className="title">
                             <span className="title-hover" onClick={()=>alert(entry._id)}>{entry.title}</span>
+                            {entry.favorite ? <span className="rainbow-text">&nbsp;&#9733;</span> : null}
                             </td>
                         <td className="rating">
                             {entry.rating ? <span>{entry.rating}</span> : <span>&ndash;</span>}
@@ -206,7 +215,11 @@ const List = (props) => {
                                     ? <span>{entry.episodesCompleted}</span> : <span>&ndash;&nbsp;</span>}
                                         /{entry.episodesTotal} 
                                         {entry.episodesCompleted < entry.episodesTotal 
-                                            ? <div className="absolute"><span className="plus-button glyphicon glyphicon-plus-sign" onClick={handleIncrement}/></div> 
+                                            ? <div className="absolute">
+                                                    <svg onClick={handleIncrement} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="plus-button bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                                                    </svg>
+                                                </div> 
                                             : null}</span>
                                 : <span>&ndash;&nbsp;&nbsp;&nbsp;</span>}
                             </td>
@@ -215,16 +228,16 @@ const List = (props) => {
                         <td className="genres">
                             {entry.genres.length > 0 
                                 ? <span>{entry.genres.join(", ")}</span>
-                                : <span className="dummy-text">No genres yet...</span>
+                                : null
                             }</td>
                         <td className="tags">
                             {entry.tags.length > 0 
                                 ? <span>{entry.tags.join(", ")}</span>
-                                : <span className="dummy-text">No tags yet...</span>
+                                : null
                             }</td>
                         <td className="notes">{entry.notes && entry.notes.length > 0 
                                 ? <span>{entry.notes}</span>
-                                : <span className="dummy-text">No notes yet...</span>
+                                : null
                             }</td>
                     </tr>
                 )}
@@ -234,7 +247,12 @@ const List = (props) => {
     const handleIncrement = () => {
         console.log("handle increment"); //TODO
     }
-    const entries = generateEntries(status, searchCriteria);
+    const [entries, setEntries] = useState(<tbody></tbody>);
+    useEffect(() => {
+        if(user) {
+            setEntries(generateEntries());
+        }
+    }, [list, status, searchCriteria, sortBy, ascending]); // eslint-disable-line react-hooks/exhaustive-deps
     
     /* --------------------------------- logout --------------------------------- */
     const logout = async () => {
@@ -325,7 +343,7 @@ const List = (props) => {
                 </table>
                 { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
                 <AddEntry darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
-                    list={list} modifyList={modifyList} refreshList={refreshList} show={showAddEntry} close={closeAddEntry}/>
+                    refreshList={refreshList} source={source} show={showAddEntry} close={closeAddEntry}/>
             </div>
         );
     }

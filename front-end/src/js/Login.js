@@ -46,7 +46,7 @@ const Login = (props) => {
         axios({
             method: "GET",
             withCredentials: true,
-            url: "/api/user"
+            url: "/api/user",
         }).then(res => {
             setUser(res.data);
         });

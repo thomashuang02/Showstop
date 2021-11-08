@@ -13,6 +13,7 @@ const EntrySchema = new mongoose.Schema({
     },
     episodesCompleted: Number,  //number of episodes user has watched
     episodesTotal: Number,      //total episodes for this media
+    favorite: Boolean,
     type: String,               //type of media, e.g. film
     genres: [String],           //list of genres
     tags: [String],             //tags, such as release year, director, actors/actresses, etc

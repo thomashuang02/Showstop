@@ -5,7 +5,13 @@ import {postEntry} from '../ListServices';
 
 const AddEntry = (props) => {
     const show = props.show, close = props.close;
-    const modifyList = props.modifyList, refreshList = props.refreshList;
+    const list = props.list, modifyList = props.modifyList, refreshList = props.refreshList;
+    const darkMode = props.darkMode;
+
+    const [ratingSliderValue, setRatingSliderValue] = useState((5).toFixed(1));
+    const onRatingSliderChange = e => {
+        setRatingSliderValue(parseFloat(e.target.value).toFixed(1));
+    }
 
     const [title, setTitle] = useState("");
     const onTitleChange = e => {
@@ -16,13 +22,27 @@ const AddEntry = (props) => {
         setGenres(e.target.value);
     }
 
-    const handleAddEntry = (e) => {
-        console.log("handling add entry with data:", new FormData(e.target));
+    const handleAddEntry = async (e) => {
         e.preventDefault();
-        /* do stuff */
-        if(true) {
+        const newEntry = {
+            title: e.target.title.value,
+            rating: e.target.rating.value,
+            status: e.target.status.value,
+            episodesCompleted: e.target.episodesCompleted.value,
+            episodesTotal: e.target.episodesTotal.value,
+            favorite: e.target.favorite.value ? true : false,
+            type: e.target.type.value,
+            genres: e.target.genres.value,
+            tags: e.target.tags.value,
+            notes: e.target.notes.value,
+        }
+        try {
+            const response = await postEntry(newEntry);
+            modifyList([response.data, ...list]);
             close();
             refreshList();
+        } catch (err) {
+            console.log(err);
         }
     }
     const preventSubmitOnEnter = (e) => {
@@ -31,56 +51,74 @@ const AddEntry = (props) => {
 
     return (
         <Modal size="lg" show={show} onHide={()=>close()} >
-            <form onSubmit={e=>handleAddEntry(e)}>
-                <Modal.Header className="modal-header">
+            <form id="add-entry-form" onSubmit={e=>handleAddEntry(e)} autocomplete="off">
+                <Modal.Header className={darkMode ? "dark-mode" : null}>
                     <Modal.Title>
                         <strong>Add Entry</strong>
                     </Modal.Title>
                     <input type="button" className="button" id="close-add-entry-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>
-                <Modal.Body className="modal-body">
+                <Modal.Body className={darkMode ? "dark-mode" : null}>
                     <div className="grid">
                         <div id="box1">
                             <label htmlFor="title">Title<span className="red">*</span></label><br/>
                             <input required className="full-width" type="text" id="title" name="title" 
-                                onChange={e=>onTitleChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                                value={title} onChange={e=>onTitleChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box2">
                             <label htmlFor="genres">Genres</label><br/>
                             <input className="full-width" type="text" id="genres" name="genres" 
-                                onChange={e=>onGenresChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                                placeholder="Separated, by, commas"
+                                value={genres} onChange={e=>onGenresChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box3">
                             <label htmlFor="status">Status<span className="red">*</span></label><br/>
-                            <input required className="full-width" type="text" id="status" name="status" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <select required className="full-width" id="status" name="status">
+                                <option value="" disabled selected>Select...</option>
+                                <option value="Watching">Watching</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="Dropped">Dropped</option>
+                                <option value="Plan to Watch">Plan to Watch</option>
+                            </select>
                         </div>
                         <div id="box4">
                             <label htmlFor="type">Type</label><br/>
-                            <input className="full-width" type="text" id="type" name="type" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <select className="full-width" id="type" name="type">
+                                <option default value="Watching">TV</option>
+                                <option value="Completed">Film</option>
+                                <option value="Completed">Other</option>
+                            </select>
                         </div>
                         <div id="box5">
                             <label htmlFor="tags">Tags</label><br/>
-                            <input className="full-width" type="text" id="tags" name="tags" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <input className="full-width" placeholder="Separated, by, commas"
+                                type="text" id="tags" name="tags" onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box6">
-                            <label htmlFor="rating">Rating</label><br/>
-                            <input className="full-width" type="text" id="rating" name="rating" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <label htmlFor="rating">Rating:<span id="rating-value"
+                                className={ratingSliderValue<3.5 ? "low-rating" : (ratingSliderValue<8.0 ? "mid-rating" : "high-rating")}>
+                                {ratingSliderValue}</span></label><br/>
+                            <input className="full-width" type="range" id="rating" name="rating" min="0.0" max="10.0" step="0.5"
+                                value={ratingSliderValue} onChange={e=>onRatingSliderChange(e)}
+                            />
                         </div>
                         <div id="box7">
                             <label htmlFor="progress">Progress</label><br/>
-                            <input className="full-width" type="text" id="progress" name="progress" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <input className="progress-input" type="number" min="0" id="progress" name="episodesCompleted"/>&nbsp;/&nbsp;
+                            <input className="progress-input" type="number" min="0" id="progress" name="episodesTotal"/>
                         </div>
                         <div id="box8">
-                            <label htmlFor="favorite">Favorite</label><br/>
-                            <input className="full-width" type="text" id="favorite" name="favorite" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <label htmlFor="favorite">Favorite?</label>&nbsp;&nbsp;
+                            <input type="checkbox" id="favorite" name="favorite" value="checked" onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box9">
                             <label htmlFor="notes">Notes</label><br/>
-                            <input className="full-width" type="text" id="notes" name="notes" onKeyDown={e=>preventSubmitOnEnter(e)}/>
+                            <textarea className="full-width" rows="4" id="notes" name="notes" onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                     </div>
                 </Modal.Body>
-                <Modal.Footer className="modal-footer">
+                <Modal.Footer className={darkMode ? "dark-mode" : null}>
                 <input className="button" id="confirm-add-entry-button" type="submit" value="Add Me"/>
                 </Modal.Footer>
             </form>

@@ -30,7 +30,7 @@ const List = (props) => {
         { value: "Completed", label: "Completed" },
         { value: "On Hold", label: "On Hold" },
         { value: "Dropped", label: "Dropped" },
-        { value: "Plan To Watch", label: "Plan To Watch" },
+        { value: "Plan to Watch", label: "Plan to Watch" },
     ]
     const [status, setStatus] = useState("Everything");
     const handleSelect = value => {
@@ -241,7 +241,7 @@ const List = (props) => {
         await axios({
             method: "GET",
             withCredentials: true,
-            url: "/logout"
+            url: "/api/logout"
         }).then(() => {
             setUser(null);
         });
@@ -324,7 +324,8 @@ const List = (props) => {
                     {entries}
                 </table>
                 { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
-                <AddEntry modifyList={modifyList} refreshList={refreshList} show={showAddEntry} close={closeAddEntry}/>
+                <AddEntry darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
+                    list={list} modifyList={modifyList} refreshList={refreshList} show={showAddEntry} close={closeAddEntry}/>
             </div>
         );
     }

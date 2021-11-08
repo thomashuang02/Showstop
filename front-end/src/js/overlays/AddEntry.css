@@ -1,9 +1,22 @@
-.modal-header, .modal-body, .modal-footer {
-    color: black;
-    background: rgb(255, 255, 255);
+.modal-content {
+    background-color: rgba(255, 255, 255, 0);
 }
-.modal-body {
-    
+.modal-header, .modal-body, .modal-footer {
+    background-color: rgba(255, 255, 255);
+    color: black;
+}
+.dark-mode {
+    background-color: rgba(29, 29, 29);
+    color: rgb(223, 223, 223);
+}
+.dark-mode input, .dark-mode select, .dark-mode textarea {
+    color: rgb(223, 223, 223);
+}
+.modal-header {
+    border-bottom: 1px solid #8b8b8b85;
+}
+.modal-footer {
+    border-top: 1px solid #8b8b8b85;
 }
 
 .red {
@@ -24,7 +37,12 @@
     grid-column: 3/4;
 } 
 #box6 {
-    grid-row: 3/5;
+    grid-row: 3/4;
+    grid-column: 1/3;
+}
+#box7 {
+    overflow: visible;
+    white-space: nowrap;
 }
 #box8 {
     grid-column: 2/3;
@@ -36,16 +54,137 @@
 .full-width {
     width: 100%;
 }
-#rating {
-    height: 80%;
-}
-#notes {
-    height: 80%;
-}
 
-#close-add-entry-button {
+#add-entry-form #close-add-entry-button {
     width: 25px;
     height: 25px;
     padding: 0px;
     font-weight: bold;
+}
+
+input, textarea, select {
+    padding: 5px;
+}
+
+#add-entry-form #close-add-entry-button, #add-entry-form #confirm-add-entry-button {
+    color: #32cc04;
+    font-weight: bold;
+}
+#add-entry-form #close-add-entry-button:hover, #add-entry-form #confirm-add-entry-button:hover {
+    color: #ffffff;
+}
+
+#add-entry-form input[type=text], #add-entry-form input[type=number], #add-entry-form input[type=range], #add-entry-form select, #add-entry-form textarea {
+    background-color: rgba(255, 255, 255, 0.212);
+    border: 1px rgba(105, 105, 105, 0.479) solid;
+    border-radius: 3px;
+}
+#add-entry-form input[type=range] {
+    border-radius: 6px !important;
+}
+#add-entry-form input[type=range] {
+    -webkit-appearance: none;
+    padding: 2px;
+}
+#add-entry-form input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: rgb(172, 172, 172);
+    width: 11px;
+    height: 20px;
+    border-radius: 5px;
+}
+#add-entry-form input[type=range]::-webkit-slider-thumb:hover {
+    cursor: grab;
+}
+#add-entry-form input[type=range]::-webkit-slider-thumb:active {
+    cursor: grabbing;
+}
+
+#rating-value {
+    width: 2em;
+    position: absolute;
+    text-align: center;
+    margin: auto;
+    bottom: 39%;
+    font-size: 24px;
+    font-weight: bold;
+}
+.low-rating {
+    background: linear-gradient(124deg, #ff0055, #ff5378, #ff0055, #a80000);
+}
+.mid-rating {
+    color: black;
+}
+.dark-mode .mid-rating {
+    color: white;
+}
+.high-rating {
+    background: linear-gradient(124deg, #32cc04, #8bd600, #32cc04, #048300);
+}
+.low-rating, .high-rating {
+    background-color: black;
+    background-size: 300%;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: rainbow 3s ease infinite;
+    -moz-animation: rainbow 3s ease infinite;
+    -o-animation: rainbow 3s ease infinite;
+    animation: rainbow 3s ease infinite;
+}
+@-webkit-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-moz-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-o-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes rainbow { 
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+
+
+#rating {
+    position: relative;
+    top: 8px;
+}
+#add-entry-form input[type=checkbox] {
+    height: 18px;
+    width: 18px;
+    position: relative;
+    top: 4px;
+}
+#add-entry-form select:invalid {
+    color: gray;
+}
+#add-entry-form select > option {
+    background-color: rgba(255, 255, 255, 0.212);
+    color: black;
+}
+#add-entry-form textarea {
+    resize: none;
+}
+#add-entry-form option[value=""][disabled] {
+    display: none;
+}
+
+.progress-input {
+    width: 60px;
+    text-align: center;
+}
+#notes {
+    height: 80%;
+}
+#favorite {
+    margin-top: 15px;
 }

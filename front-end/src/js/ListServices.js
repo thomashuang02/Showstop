@@ -5,6 +5,7 @@ export function getList() {
 }
 
 export function postEntry(entry) {
+    console.log(entry);
     return axios.post("api/list", entry);
 }
 

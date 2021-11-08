@@ -318,7 +318,7 @@ const List = (props) => {
                         styles={customStyles} theme={customTheme} placeholder={'Status...'}
                     />
                     <span id="search">
-                        <input id="basic-search" type="text" placeholder="Search..." onChange={e => setSearchCriteria(e.target.value)}></input>
+                        <input id="basic-search" type="text" placeholder="Search by title..." onChange={e => setSearchCriteria(e.target.value)}></input>
                         <input className="button" id="advanced-search" type="button" value="Advanced Search"/>
                         <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"
                             onClick={() => openAddEntry()}

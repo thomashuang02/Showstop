@@ -68,41 +68,45 @@ The application will store Users, each containing a List containing Media entrie
 }
 ```
 
-### [First Draft Schema](./back-end/src/db.js?raw=true):
+### [First Draft Schema](./src/models/User.js?raw=true):
 ```javascript
-const mongoose = require('mongoose');
-
-// User Schema
 const mongoose = require('mongoose');
 
 // Media Entry Schema
 const EntrySchema = new mongoose.Schema({
-    title: String,               //name of entry
-    type: String,               //type of media, e.g. film
-    genres: [String],           //list of genres
-    status: String,             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+    title: {
+        type: String,               //name of entry
+        required: true
+    },
     rating: Number,             //user rating from 0.0 to 10.0
+    status: {
+        type: String,             //Plan to Watch, Watching, Completed, On Hold, or Dropped
+        required: true
+    },
     episodesCompleted: Number,  //number of episodes user has watched
     episodesTotal: Number,      //total episodes for this media
-    notes: String,
+    favorite: Boolean,
+    type: String,               //type of media, e.g. film
+    genres: [String],           //list of genres
     tags: [String],             //tags, such as release year, director, actors/actresses, etc
+    notes: String,
     dateAdded: Date             //date this entry was added
 });
 
 // User Schema
 const UserSchema = new mongoose.Schema({
-    username: String,   //e.g. movieaddict420
-    avatar: String,     //reference to image that user can upload
-    bio: String,        //optional bio
-    hash: String,       //hashed password
-    salt: String,       //salt used for hashing passowrd
+    username: {
+        type: String,   //e.g. movieaddict420
+        required: true
+    },
+    password: {
+        type: String,   //salt+hashed password using bcryptjs
+        required: true
+    },
     list: [EntrySchema] //list of media entries
 });
 
-mongoose.model('Entry', EntrySchema);
-mongoose.model('User', UserSchema);
-
-mongoose.connect('mongodb://localhost/aitfinalproject');
+module.exports = mongoose.model('User', UserSchema);
 ```
 
 ## Wireframes
@@ -140,21 +144,31 @@ mongoose.connect('mongodb://localhost/aitfinalproject');
 
 ## Research Topics
 
-* (3 points) Perform client side form validation using a JavaScript library (probably [validator](https://github.com/yairEO/validator)).
-  * useful for making text fields (such as username/password) are reasonable lengths, and helpful for helping user input valid criteria when creating/editing entries and searching/filtering list
-* (2 points) Configure and use a Bootstrap theme and use the framework throughout the site.
-  * I will still likely use some raw CSS, but I don't want that to be my focus.
+* (3 points) Perform client side form validation using custom JavaScript.
+  * currently apparent in the [login/registration forms](./front-end/src/js/Login.js?raw=true) and some of the [add-entry form](./front-end/src/js/overlays/AddEntry.js?raw=true).
 * (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. 
-  * I plan to use React for my entire front-end then connect it to Express on the back-end (which will essentially just be a proxy to my Mongo database), so I've assigned it 3 points.
+  * All screens and interfaces in the front-end directory are written in JSX.
+* (3 points) Unit testing of backend routes with JavaScript using Mocha and Chai, as well as Istanbul for tracking code coverage. 
+  * yet to do.
+* (1 point) [react-select](https://react-select.com/home) for better-customizable select inputs on the front-end.
+  * configuration at line 39 of [List.js](./front-end/src/js/List.js?raw=true), usage at line 317.
 * (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
-  * This is going to make debugging my server a fair bit easier.
+  * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
+* (1 point) [cors](https://www.npmjs.com/package/cors) as server-side Javascript middleware to allow my front-end and back-end to communicate with one another.
+  * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
+* (1 point) [cookie-parser](https://www.npmjs.com/package/cookie-parser) as a server-side Javascript module for ease of managing cookies, particularly for stuff like dark-mode.
+  * cookies read in [App.js](./front-end/src/js/App.js?raw=true) and [Login.js](./front-end/src/js/Login.js?raw=true), read and written in [List.js](./front-end/src/js/List.js?raw=true)
+* (1 point) [passport](https://www.npmjs.com/package/passport) and [passport-local](http://www.passportjs.org/packages/passport-local/) as a server-side Javascript module for authentication a nd specifying a local strategy for it.
+  * config in [passportConfig.js](./src/passportConfig.js?raw=true), authentication utilized in [authenticationRoutes.js](./src/routes/authenticationRoutes.js?raw=true)
+* (1 point) [axios](https://www.npmjs.com/package/axios) for promise-based HTTP requests on both the front- and back-end.
+  * used at various points in the front-end to make requests to back-end, which uses it also to proxy those requests to MongoDB Atlas. 
 * (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
   * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
-10 points total out of 8 required points.
+16 points total out of 8 required points.
 
 
-## [Initial Main Project File](./back-end/src/app.js?raw=true) 
+## [Initial Main Project File](./src/app.js?raw=true) 
 
 ```javascript
 const express = require('express');
@@ -184,10 +198,9 @@ app.listen(3000);
 
 ## Annotations / References Used
 
-I'll be updating this as I work on the project.
-
-(___TODO__: list any tutorials/references/etc. that you've based your code off of_)
-
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
-
+1. [tutorial for passport config and authentication](https://www.youtube.com/watch?v=IUw_TgRhTBE) - [passportConfig.js](./src/passportConfig.js?raw=true), [authenticationRoutes.js](./src/routes/authenticationRoutes.js?raw=true)
+2. [css grid vs flexbox tutorial](https://www.youtube.com/watch?v=9zA8cB-54SA&t=198s) - [AddEntry.js](./front-end/src/js/overlays/AddEntry.js?raw=true)
+3. [Bootstrap <Modal> documentation](https://react-bootstrap.github.io/components/modal/) - [AddEntry.js](./front-end/src/js/overlays/AddEntry.js?raw=true)
+4. [react-cookie documentation](https://www.npmjs.com/package/react-cookie) - [App.js](./front-end/src/js/App.js?raw=true)
+5. [MERN-stack todo list app tutorial](https://dev.to/jahangeer/how-to-build-a-todo-list-app-with-react-node-js-mern-stack-3ban) - inspiration for file structure of backend routing and list-modifying functions
+6. [Typewriter text effect](https://usefulangle.com/post/85/css-typewriter-animation) - [Typewriter.js](./front-end/src/js/Typewriter.js?raw=true)

@@ -37,7 +37,6 @@ router.post("/", (req, res) => {
         User.findOne({ '_id' : req.user._id }).then(user => {
             user.list.push(newEntry);
             user.save().then(() => {
-                console.log("success");
                 res.send(newEntry);
             });
         });

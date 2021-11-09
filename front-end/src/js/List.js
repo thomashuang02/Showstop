@@ -5,6 +5,7 @@ import '../css/List.css';
 import axios from 'axios';
 import { useCookies } from "react-cookie";
 import AddEntry from './overlays/AddEntry';
+import EditEntry from './overlays/EditEntry';
 import {getList} from './ListServices';
 
 const List = (props) => {
@@ -78,7 +79,7 @@ const List = (props) => {
     const refreshList = async (source) => {
         try {
             const response = await getList(source);
-            modifyList(response.data);
+            modifyList(Array.isArray(response.data) ? response.data : list);
         } catch (err) {
             console.log(err);
         }
@@ -98,7 +99,7 @@ const List = (props) => {
     //title
     const sortByTitle = () => {
         const reverse = ascending[0] ? 1 : -1;
-        list.sort((a, b) => reverse * ((a.title > b.title) ? -1 : 1));
+        list.sort((a, b) => reverse * ((a.title.toLowerCase() > b.title.toLowerCase()) ? -1 : 1));
     }
     //rating
     const sortByRating = () => {
@@ -142,7 +143,7 @@ const List = (props) => {
         "progress" : sortByProgress
     }
     const [sortBy, setSortBy] = useState("status");
-    const [ascending, setAscending] = useState([true,true,true,true]);
+    const [ascending, setAscending] = useState([false,true,true,true]);
 
     const clearArrowsExcept = n => {
         const arrows = document.getElementsByClassName("arrow");
@@ -187,7 +188,6 @@ const List = (props) => {
 
     /* ------------------------------- list items ------------------------------- */
     const generateEntries = () => {
-        console.log("Generating");
         sortFunctions[sortBy]();
         return ( 
             <tbody>
@@ -202,7 +202,9 @@ const List = (props) => {
                     <tr key={entry._id}>
                         <td className="number">{i+1}</td>
                         <td className="title">
-                            <span className="title-hover" onClick={()=>alert(entry._id)}>{entry.title}</span>
+                            <span className="title-hover" onClick={() => {
+                            setCurrentEntry(entry); openEditEntry();}}>
+                                {entry.title}</span>
                             {entry.favorite ? <span className="rainbow-text">&nbsp;&#9733;</span> : null}
                             </td>
                         <td className="rating">
@@ -210,10 +212,10 @@ const List = (props) => {
                             </td>
                         <td className="status">{entry.status}</td>
                         <td className="progression">
-                            {entry.episodesTotal 
-                                ? <span>{entry.episodesCompleted
-                                    ? <span>{entry.episodesCompleted}</span> : <span>&ndash;&nbsp;</span>}
-                                        /{entry.episodesTotal} 
+                            {(entry.episodesCompleted || entry.episodesTotal)
+                                ? <span>{
+                                    entry.episodesCompleted ? <span>{entry.episodesCompleted}</span> : <span>&ndash;&nbsp;</span>}
+                                    /{entry.episodesTotal ? <span>{entry.episodesTotal}</span> : <span>&nbsp;&ndash;</span>}
                                         {entry.episodesCompleted < entry.episodesTotal 
                                             ? <div className="absolute">
                                                     <svg onClick={handleIncrement} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="plus-button bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -245,7 +247,7 @@ const List = (props) => {
         );
     }
     const handleIncrement = () => {
-        console.log("handle increment"); //TODO
+        alert("Not yet implemented :)");
     }
     const [entries, setEntries] = useState(<tbody></tbody>);
     useEffect(() => {
@@ -281,12 +283,17 @@ const List = (props) => {
     }
     useEffect(() => {
         props.updateDarkMode(cookies.mode);
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [cookies.mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
     /* -------------------------------- overlays -------------------------------- */
     const [showAddEntry, setAddEntry] = useState(false)
     const openAddEntry = () => setAddEntry(true)
     const closeAddEntry = () => setAddEntry(false)
+
+    const [currentEntry, setCurrentEntry] = useState({});
+    const [showEditEntry, setEditEntry] = useState(false)
+    const openEditEntry = () => setEditEntry(true)
+    const closeEditEntry = () => setEditEntry(false)
 
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
@@ -319,7 +326,7 @@ const List = (props) => {
                     />
                     <span id="search">
                         <input id="basic-search" type="text" placeholder="Search by title..." onChange={e => setSearchCriteria(e.target.value)}></input>
-                        <input className="button" id="advanced-search" type="button" value="Advanced Search"/>
+                        <input onClick={()=>alert("Not yet implemented :)")} className="button" id="advanced-search" type="button" value="Advanced Search"/>
                         <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"
                             onClick={() => openAddEntry()}
                         />
@@ -343,7 +350,9 @@ const List = (props) => {
                 </table>
                 { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
                 <AddEntry darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
-                    refreshList={refreshList} source={source} show={showAddEntry} close={closeAddEntry}/>
+                    list={list} modifyList={modifyList} source={source} show={showAddEntry} close={closeAddEntry}/>
+                <EditEntry entry={currentEntry} darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
+                    list={list} modifyList={modifyList} source={source} show={showEditEntry} close={closeEditEntry}/>
             </div>
         );
     }

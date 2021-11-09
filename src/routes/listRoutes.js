@@ -24,7 +24,8 @@ router.get("/", (req, res) => {
             res.send(user.list);
         });
     } catch (err) {
-        res.send(err);
+        console.log(err);
+        res.redirect("/");
     }
 });
 
@@ -37,11 +38,12 @@ router.post("/", (req, res) => {
         User.findOne({ '_id' : req.user._id }).then(user => {
             user.list.push(newEntry);
             user.save().then(() => {
-                res.send(newEntry);
+                res.send(user.list);
             });
         });
     } catch (err) {
-        res.send(err);
+        console.log(err);
+        res.redirect("/");
     }
 });
 
@@ -49,25 +51,49 @@ router.post("/", (req, res) => {
 router.put("/:id", (req, res) => {
     try {
         const modifiedEntry = formatEntry(req.body);
-        User.findOne({ '_id' : req.user._id }).then(user => {
-            user.list.id(req.params.id) = modifiedEntry;
-            user.save().then(() => {
-                res.send(modifiedEntry);
-            });
-        });
+        User.findOneAndUpdate(
+            { '_id' : req.user._id, "list._id" : req.params.id },
+            {
+                "$set": {
+                    "list.$": modifiedEntry
+                }
+            }, 
+            {new: true},
+            (err, user) => {
+                if(err) {
+                    console.log(err);
+                    res.redirect("/");
+                }
+                res.send(user.list);
+            }
+        );
     } catch (err) {
-        res.send(err);
+        console.log(err);
+        res.redirect("/");
     }
 });
 
 router.delete("/:id", (req, res) => {
     try {
-        User.findOne({ '_id' : req.user._id }).then(user => {
-            user.list.pull({ _id: req.params._id });
-            user.save();
-        });
+        User.findOneAndUpdate(
+            { '_id' : req.user._id },
+            {
+                "$pull": {
+                    list : { _id : req.params.id }
+                }
+            }, 
+            {new: true},
+            (err, user) => {
+                if(err) {
+                    console.log(err);
+                    res.redirect("/");
+                }
+                res.send(user.list);
+            }
+        );
     } catch (err) {
-        res.send(err);
+        console.log(err);
+        res.redirect("/");
     }
 });
 

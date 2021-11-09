@@ -111,7 +111,7 @@ input, textarea, select {
     font-weight: bold;
 }
 .low-rating {
-    background: linear-gradient(124deg, #ff0055, #ff5378, #ff0055, #a80000);
+    background: linear-gradient(124deg, #ff0055, #ff3281, #ff0055, #a80000);
 }
 .mid-rating {
     color: black;
@@ -198,5 +198,32 @@ input, textarea, select {
 }
 #clear-rating:hover {
     color: #32cc04;
+    cursor: pointer;
+}
+
+#date-added {
+    font-size: 14px;
+}
+
+#delete-entry-button {
+    position: absolute;
+    font-size: 14px;
+    font-weight: bold;
+    left: 12px;
+    color: rgb(255, 17, 69);
+    background-color: transparent;
+    border: 1px solid rgb(255, 17, 69);
+    border-radius: 6px;
+    padding: 5px;
+}
+#delete-entry-button:hover {
+    background-color: #32cc04;
+    background: linear-gradient(124deg, #ff0055, #ff3281, #ff0055, #a80000);
+    background-size: 400%;
+    color: white;
+    -webkit-animation: rainbow 4s ease infinite;
+    -moz-animation: rainbow 4s ease infinite;
+    -o-animation: rainbow 4s ease infinite;
+    animation: rainbow 4s ease infinite;
     cursor: pointer;
 }

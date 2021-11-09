@@ -1,109 +1,149 @@
 import {React, useEffect, useState} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import '../../css/EntryOverlay.css';
-import {postEntry} from '../ListServices';
+import {putEntry, deleteEntry} from '../ListServices';
 
-const AddEntry = (props) => {
+const EditEntry = (props) => {
     const show = props.show, close = props.close;
     const list = props.list, modifyList = props.modifyList;
     const darkMode = props.darkMode;
 
+    const [deleted, setDeleted] = useState(false);
+    const [changed, setChanged] = useState(false);
+    const [entry_id, setEntry_id] = useState();
+    const [dateAdded, setDateAdded] = useState();
     const [title, setTitle] = useState("");
     const onTitleChange = e => {
+        setChanged(true);
         setTitle(e.target.value);
     }
     const [ratingSliderValue, setRatingSliderValue] = useState("");
     const onRatingSliderChange = e => {
+        setChanged(true);
         setRatingSliderValue(parseFloat(e.target.value).toFixed(1));
     }
     const [status, setStatus] = useState("");
     const onStatusChange = e => {
+        setChanged(true);
         setStatus(e.target.value);
     }
     const [episodesCompleted, setEpisodesCompleted] = useState("");
     const onEpisodesCompletedChange = e => {
+        setChanged(true);
         setEpisodesCompleted(e.target.value);
     }
     const [episodesTotal, setEpisodesTotal] = useState("");
     const onEpisodesTotalChange = e => {
+        setChanged(true);
         setEpisodesTotal(e.target.value);
     }
     const [favorite, setFavorite] = useState(false);
     const onFavoriteChange = () => {
+        setChanged(true);
         setFavorite(!favorite); //toggle
     }
     const [type, setType] = useState("TV");
     const onTypeChange = e => {
+        setChanged(true);
         setType(e.target.value);
     }
     const [genres, setGenres] = useState("");
     const onGenresChange = e => {
+        setChanged(true);
         setGenres(e.target.value);
     }
     const [tags, setTags] = useState("");
     const onTagsChange = e => {
+        setChanged(true);
         setTags(e.target.value);
     }
     const [notes, setNotes] = useState("");
     const onNotesChange = e => {
+        setChanged(true);
         setNotes(e.target.value);
     }
+
+    const entry = props.entry;
+    
+    const refreshEntry = () => {
+        setDeleted(false);
+        setChanged(false);
+        setEntry_id(entry._id || "");
+        setDateAdded(entry.dateAdded || Date.now());
+        setTitle(entry.title || "");
+        setRatingSliderValue(entry.rating || "");
+        setStatus(entry.status || "");
+        setEpisodesCompleted(entry.episodesCompleted || "");
+        setEpisodesTotal(entry.episodesTotal || "");
+        setFavorite(entry.favorite || false);
+        setType(entry.type || "TV");
+        setGenres(entry.genres ? entry.genres.join(", ") : "");
+        setTags(entry.tags ? entry.tags.join(", ") : "");
+        setNotes(entry.notes || "");
+    };
+
+    useEffect(() => {
+        if(show) {
+            refreshEntry();
+        }
+    }, [show]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClose = () => {
         close();
     }
 
-    const resetAdd = () => {
-        setTitle("");
-        setRatingSliderValue("");
-        setStatus("");
-        setEpisodesCompleted("");
-        setEpisodesTotal("");
-        setFavorite(false);
-        setType("TV");
-        setGenres("");
-        setTags("");
-        setNotes("");
-    };
-
-    useEffect(() => {
-        if(show) {
-            resetAdd();
-        }
-    }, [show]);
-
-    const handleAddEntry = async (e) => {
+    const handleEditEntry = async (e) => {
         e.preventDefault();
-        const newEntry = {
-            title: title, //required
-            rating: ratingSliderValue !== "" ? ratingSliderValue : null,
-            status: status, //required
-            episodesCompleted: episodesCompleted !== "" ? episodesCompleted : null,
-            episodesTotal: episodesTotal !== "" ? episodesTotal : null,
-            favorite: favorite,
-            type: type,
-            genres: genres,
-            tags: tags,
-            notes: notes !== "" ? notes : null,
+        if(deleted) {
+            console.log('beans');
+            try {
+                const response = await deleteEntry(entry_id);
+                handleClose();
+                modifyList(Array.isArray(response.data) ? response.data : list);
+            } catch (err) {
+                console.log(err);
+            }
         }
-        try {
-            const response = await postEntry(newEntry);
+        else if(changed) {
+            const modifiedEntry = {
+                title: title, //required
+                rating: ratingSliderValue !== "" ? ratingSliderValue : null,
+                status: status, //required
+                episodesCompleted: episodesCompleted !== "" ? episodesCompleted : null,
+                episodesTotal: episodesTotal !== "" ? episodesTotal : null,
+                favorite: favorite,
+                type: type,
+                genres: genres,
+                tags: tags,
+                notes: notes !== "" ? notes : null,
+            }
+            try {
+                const response = await putEntry(entry_id, modifiedEntry);
+                handleClose();
+                modifyList(Array.isArray(response.data) ? response.data : list);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        else {
             handleClose();
-            modifyList(Array.isArray(response.data) ? response.data : list);
-        } catch (err) {
-            console.log(err);
         }
     }
     const preventSubmitOnEnter = (e) => {
         e.key === 'Enter' && e.preventDefault();
     }
 
+    const formatDate = (date) => {
+        const dateObj = Date(date);
+        return dateObj.slice(4, 10) + "," + dateObj.slice(10, 15);
+    }
+
     return (
         <Modal size="lg" show={show} onHide={()=>handleClose()} >
-            <form id="add-entry-form" onSubmit={e=>handleAddEntry(e)} autoComplete="off">
+            <form id="add-entry-form" onSubmit={e=>handleEditEntry(e)} autoComplete="off">
                 <Modal.Header className={darkMode ? "dark-mode" : null}>
                     <Modal.Title>
-                        <strong>Add Entry</strong>
+                        <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">added {formatDate(dateAdded)}</span>
                     </Modal.Title>
                     <input type="button" className="button" id="close-add-entry-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>
@@ -111,19 +151,19 @@ const AddEntry = (props) => {
                     <div className="grid">
                         <div id="box1">
                             <label htmlFor="title">Title<span className="red">*</span></label><br/>
-                            <input required className="full-width" type="text" id="title" name="title" 
+                            <input value={title} required className="full-width" type="text" id="title" name="title" 
                                 onChange={e=>onTitleChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box2">
                             <label htmlFor="genres">Genres</label><br/>
-                            <input className="full-width" type="text" id="genres" name="genres" 
+                            <input value={genres} className="full-width" type="text" id="genres" name="genres" 
                                 placeholder="Separated, by, commas"
                                 onChange={e=>onGenresChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                         <div id="box3">
                             <label htmlFor="status">Status<span className="red">*</span></label><br/>
-                            <select required className="full-width" 
-                                onChange={e=>onStatusChange(e)} id="status" name="status" defaultValue="">
+                            <select value={status} required className="full-width" 
+                                onChange={e=>onStatusChange(e)} id="status" name="status">
                                 <option value="" disabled>Select...</option>
                                 <option value="Watching">Watching</option>
                                 <option value="Completed">Completed</option>
@@ -134,7 +174,7 @@ const AddEntry = (props) => {
                         </div>
                         <div id="box4">
                             <label htmlFor="type">Type</label><br/>
-                            <select className="full-width" id="type" name="type"
+                            <select value={type} className="full-width" id="type" name="type"
                                 onChange={e=>onTypeChange(e)}>
                                 <option default value="TV">TV</option>
                                 <option value="Film">Film</option>
@@ -143,7 +183,7 @@ const AddEntry = (props) => {
                         </div>
                         <div id="box5">
                             <label htmlFor="tags">Tags</label><br/>
-                            <input className="full-width" placeholder="Separated, by, commas"
+                            <input value={tags} className="full-width" placeholder="Separated, by, commas"
                                 type="text" id="tags" name="tags" onKeyDown={e=>preventSubmitOnEnter(e)}
                                 onChange={e=>onTagsChange(e)}
                                 />
@@ -160,32 +200,33 @@ const AddEntry = (props) => {
                         </div>
                         <div id="box7">
                             <label htmlFor="progress">Progress</label><br/>
-                            <input className="progress-input" type="number" min="0" max={episodesTotal} id="progress" name="episodesCompleted"
+                            <input value={episodesCompleted} className="progress-input" max={episodesTotal} type="number" min="0" id="progress" name="episodesCompleted"
                                 onChange={e=>onEpisodesCompletedChange(e)}
                             />&nbsp;/&nbsp;
-                            <input className="progress-input" type="number" min="0" id="progress" name="episodesTotal"
+                            <input value={episodesTotal} className="progress-input" type="number" min="0" id="progress" name="episodesTotal"
                                 onChange={e=>onEpisodesTotalChange(e)}
                             />
                         </div>
                         <div id="box8">
                             <label htmlFor="favorite">Favorite?</label>&nbsp;&nbsp;
                             <input type="checkbox" id="favorite" name="favorite"
-                                onChange={()=>onFavoriteChange()}
+                                onChange={()=>onFavoriteChange()} checked={favorite ? true : false}
                             />
                         </div>
                         <div id="box9">
                             <label htmlFor="notes">Notes</label><br/>
-                            <textarea className="full-width" rows="4" id="notes" name="notes" 
+                            <textarea value={notes} className="full-width" rows="4" id="notes" name="notes" 
                                 onChange={e=>onNotesChange(e)} onKeyDown={e=>preventSubmitOnEnter(e)}/>
                         </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer className={darkMode ? "dark-mode" : null}>
-                <input className="button" id="confirm-add-entry-button" type="submit" value="Add Me"/>
+                <input onClick={()=>setDeleted(true)} id="delete-entry-button" type="submit" value="Delete Entry"/>
+                <input className="button" id="confirm-add-entry-button" type="submit" value="Save Changes"/>
                 </Modal.Footer>
             </form>
         </Modal>
     );
 }
 
-export default AddEntry;
+export default EditEntry;

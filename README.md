@@ -154,8 +154,6 @@ module.exports = mongoose.model('User', UserSchema);
   * configuration at line 39 of [List.js](./front-end/src/js/List.js?raw=true), usage at line 317.
 * (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
   * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
-* (1 point) [cors](https://www.npmjs.com/package/cors) as server-side Javascript middleware to allow my front-end and back-end to communicate with one another.
-  * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
 * (1 point) [cookie-parser](https://www.npmjs.com/package/cookie-parser) as a server-side Javascript module for ease of managing cookies, particularly for stuff like dark-mode.
   * cookies read in [App.js](./front-end/src/js/App.js?raw=true) and [Login.js](./front-end/src/js/Login.js?raw=true), read and written in [List.js](./front-end/src/js/List.js?raw=true)
 * (1 point) [passport](https://www.npmjs.com/package/passport) and [passport-local](http://www.passportjs.org/packages/passport-local/) as a server-side Javascript module for authentication a nd specifying a local strategy for it.
@@ -167,7 +165,7 @@ module.exports = mongoose.model('User', UserSchema);
 * (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
   * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
-17 points total out of 8 required points.
+16 points total out of 8 required points.
 
 
 ## [Initial Main Project File](./src/app.js?raw=true) 

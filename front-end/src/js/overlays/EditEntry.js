@@ -97,9 +97,12 @@ const EditEntry = (props) => {
         if(deleted) {
             console.log('beans');
             try {
-                const response = await deleteEntry(entry_id);
-                handleClose();
-                modifyList(Array.isArray(response.data) ? response.data : list);
+                const confirm = window.confirm("Delete this entry permanently?");
+                if(confirm) {
+                    const response = await deleteEntry(entry_id);
+                    handleClose();
+                    modifyList(Array.isArray(response.data) ? response.data : list);
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -145,7 +148,7 @@ const EditEntry = (props) => {
                     <Modal.Title>
                         <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">added {formatDate(dateAdded)}</span>
                     </Modal.Title>
-                    <input type="button" className="button" id="close-add-entry-button" onClick={()=>close()} value="&times;"/>
+                    <input type="button" className="button" id="close-overlay-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>
                 <Modal.Body className={darkMode ? "dark-mode" : null}>
                     <div className="grid">

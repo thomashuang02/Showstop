@@ -6,7 +6,8 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import AddEntry from './overlays/AddEntry';
 import EditEntry from './overlays/EditEntry';
-import {getList} from './ListServices';
+import Help from './overlays/Help';
+import {getList, putEntry} from './ListServices';
 
 const List = (props) => {
     const [user, setUser] = [props.user, props.setUser];
@@ -218,7 +219,8 @@ const List = (props) => {
                                     /{entry.episodesTotal ? <span>{entry.episodesTotal}</span> : <span>&nbsp;&ndash;</span>}
                                         {entry.episodesCompleted < entry.episodesTotal 
                                             ? <div className="absolute">
-                                                    <svg onClick={handleIncrement} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="plus-button bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                                    <svg onClick={() => {handleIncrement(entry);}} 
+                                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="plus-button bi bi-plus-circle-fill" viewBox="0 0 16 16">
                                                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
                                                     </svg>
                                                 </div> 
@@ -246,8 +248,19 @@ const List = (props) => {
             </tbody>
         );
     }
-    const handleIncrement = () => {
-        alert("Not yet implemented :)");
+    const handleIncrement = async (entry) => {
+        const modifiedEntry = {
+            ...entry,
+            episodesCompleted: entry.episodesCompleted + 1,
+            genres: entry.genres.join(", "),
+            tags: entry.genres.join(", ")
+        }
+        try {
+            const response = await putEntry(modifiedEntry._id, modifiedEntry);
+            modifyList(Array.isArray(response.data) ? response.data : list);
+        } catch (err) {
+            console.log(err);
+        }
     }
     const [entries, setEntries] = useState(<tbody></tbody>);
     useEffect(() => {
@@ -295,6 +308,10 @@ const List = (props) => {
     const openEditEntry = () => setEditEntry(true)
     const closeEditEntry = () => setEditEntry(false)
 
+    const [showHelp, setHelp] = useState(false)
+    const openHelp = () => setHelp(true)
+    const closeHelp = () => setHelp(false)
+
     /* ----------------------------------- jsx ---------------------------------- */
     if(user) {
         return (
@@ -309,7 +326,7 @@ const List = (props) => {
                         <h2 id="list-name">{user.username}'s List</h2>
                     </div>
                     <div className="right">
-                        <div id="logo">
+                        <div id="top-right-tools">
                             <input className="button" id="toggle-mode" type="button" value={modeButtonValue}
                                 onClick={toggleDarkMode}
                             />
@@ -321,22 +338,22 @@ const List = (props) => {
                     </div>
                 </div>
                 <div id="toolbar">
+                    <input className="button" id="help-button" value="?" type="button" onClick={() => openHelp()}/>
                     <Select id="status-select" options={options} onChange={ value => handleSelect(value) }
                         styles={customStyles} theme={customTheme} placeholder={'Status...'}
                     />
                     <span id="search">
                         <input id="basic-search" type="text" placeholder="Search by title..." onChange={e => setSearchCriteria(e.target.value)}></input>
-                        <input onClick={()=>alert("Not yet implemented :)")} className="button" id="advanced-search" type="button" value="Advanced Search"/>
                         <input className="button" id="add-entry-button" type="button" value="&#43; Add Entry"
                             onClick={() => openAddEntry()}
                         />
                     </span>
                 </div>
-                <table className="table">
-                    <thead>
+                <table className={"table " + (cookies.mode ? (cookies.mode === "dark" ? "dark-mode" : "") : "")}>
+                    <thead className={(cookies.mode ? (cookies.mode === "dark" ? "dark-mode" : "") : "")}>
                         <tr className="sticky" id="info-header">
                             <th id="number-header" className="number">#</th>
-                            <th className="title button header-border" onClick={handleTitleSort}><span id="title-header">Title</span> <span className="arrow"></span></th>
+                            <th className={"title button header-border"} onClick={handleTitleSort}><span id="title-header">Title</span> <span className="arrow"></span></th>
                             <th className="rating button header-border" onClick={handleRatingSort}><span id="rating-header">Rating</span> <span className="arrow"></span></th>
                             <th className="status button header-border" onClick={handleStatusSort}><span id="status-header">Status</span> <span className="arrow"></span></th>
                             <th className="progression-header button header-border" onClick={handleProgressSort}><span id="progress-header">Progress</span> <span className="arrow"></span></th>
@@ -350,9 +367,11 @@ const List = (props) => {
                 </table>
                 { list.length === 0 ? <div id="no-entries">Add your first entry to get started (´▽｀)</div> : null}
                 <AddEntry darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
-                    list={list} modifyList={modifyList} source={source} show={showAddEntry} close={closeAddEntry}/>
+                    list={list} modifyList={modifyList} show={showAddEntry} close={closeAddEntry}/>
                 <EditEntry entry={currentEntry} darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
-                    list={list} modifyList={modifyList} source={source} show={showEditEntry} close={closeEditEntry}/>
+                    list={list} modifyList={modifyList} show={showEditEntry} close={closeEditEntry}/>
+                <Help darkMode={cookies.mode ? (cookies.mode === "dark" ? true : false) : false}
+                    show={showHelp} close={closeHelp}/>
             </div>
         );
     }

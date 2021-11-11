@@ -105,7 +105,7 @@ const AddEntry = (props) => {
                     <Modal.Title>
                         <strong>Add Entry</strong>
                     </Modal.Title>
-                    <input type="button" className="button" id="close-add-entry-button" onClick={()=>close()} value="&times;"/>
+                    <input type="button" className="button" id="close-overlay-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>
                 <Modal.Body className={darkMode ? "dark-mode" : null}>
                     <div className="grid">

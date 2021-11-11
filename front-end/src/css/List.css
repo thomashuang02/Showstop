@@ -3,8 +3,9 @@
     color: #2cbe00;
     background-color: transparent;
     border: 1px solid #2ab300;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 8px;
+    box-shadow: #2ab300 0 0 3px;
 }
 .button:hover {
     background-color: #32cc04;
@@ -66,6 +67,15 @@
     font-weight: bold;
     font-size: 14px;
 }
+#help-button {
+    width: 25px;
+    height: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 10px;
+    border-radius: 100px;
+    padding: 0;
+}
 .css-6j8wv5-Input:hover {
     cursor: pointer;
 }
@@ -107,17 +117,11 @@
     border: 1px solid #29af00;
     border-right: 0;
 }
-#advanced-search {
-    font-weight: bold;
-    font-size: 14px;
-    border-radius: 0;
-}
 #add-entry-button {
     font-weight: bold;
     font-size: 14px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
-    border-left: 0;
 }
 
 /* ---------------------------- table in general ---------------------------- */
@@ -167,6 +171,21 @@
     height: 35px;
     font-size: 15px;
 }
+#info-header > th {
+    background: white;
+}
+.dark-mode #info-header > th {
+    background: rgb(29, 29, 29);
+}
+#info-header > th.header-border:hover {
+    background-color: #32cc04;
+    background: linear-gradient(124deg, #048300, #32cc04, #8bd600, #32cc04);
+    background-size: 400%;
+    -webkit-animation: rainbow 4s ease infinite;
+    -moz-animation: rainbow 4s ease infinite;
+    -o-animation: rainbow 4s ease infinite;
+    animation: rainbow 4s ease infinite;
+}
 .arrow {
     display: none;
 }
@@ -184,7 +203,7 @@
 }
 .header-border {
     border: none !important;
-    border-radius: 4px 4px 0 0;
+    border-radius: 0;
 }
 .title {
     width: auto;

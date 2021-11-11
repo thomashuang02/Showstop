@@ -55,7 +55,7 @@
     width: 100%;
 }
 
-#add-entry-form #close-add-entry-button {
+#close-overlay-button {
     width: 25px;
     height: 25px;
     padding: 0px;
@@ -66,11 +66,11 @@ input, textarea, select {
     padding: 5px;
 }
 
-#add-entry-form #close-add-entry-button, #add-entry-form #confirm-add-entry-button {
+#close-overlay-button, #confirm-add-entry-button {
     color: #32cc04;
     font-weight: bold;
 }
-#add-entry-form #close-add-entry-button:hover, #add-entry-form #confirm-add-entry-button:hover {
+#close-overlay-button:hover, #confirm-add-entry-button:hover {
     color: #ffffff;
 }
 

@@ -217,7 +217,7 @@ const List = (props) => {
                                 ? <span>{
                                     entry.episodesCompleted ? <span>{entry.episodesCompleted}</span> : <span>&ndash;&nbsp;</span>}
                                     /{entry.episodesTotal ? <span>{entry.episodesTotal}</span> : <span>&nbsp;&ndash;</span>}
-                                        {entry.episodesCompleted < entry.episodesTotal 
+                                        {entry.episodesCompleted < entry.episodesTotal || !entry.episodesTotal 
                                             ? <div className="absolute">
                                                     <svg onClick={() => {handleIncrement(entry);}} 
                                                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="plus-button bi bi-plus-circle-fill" viewBox="0 0 16 16">
@@ -303,7 +303,7 @@ const List = (props) => {
     const openAddEntry = () => setAddEntry(true)
     const closeAddEntry = () => setAddEntry(false)
 
-    const [currentEntry, setCurrentEntry] = useState(null);
+    const [currentEntry, setCurrentEntry] = useState({});
     const [showEditEntry, setEditEntry] = useState(false)
     const openEditEntry = () => setEditEntry(true)
     const closeEditEntry = () => setEditEntry(false)
@@ -318,7 +318,7 @@ const List = (props) => {
             <div>
                 <div id="main-header">
                     <div className="left">
-                        <h1 className="rainbow-text" id="showstop">
+                        <h1 className="rainbow-text" id="showstop" onClick={() => openHelp()}>
                             Showstop
                         </h1>
                     </div>

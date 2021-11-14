@@ -51,6 +51,9 @@
     font-weight: bold;
     margin-left: 3vw;
 }
+#main-header #showstop:hover {
+    cursor: pointer;
+}
 #main-header #list-name {
     margin: 0;
     font-size: 35px;

@@ -8,12 +8,12 @@ const commaSeparatedToArray = (str) => {
     return str.split(",").map(piece => piece.trim()).filter(piece => piece.length !== 0);
 }
 
-const formatEntry = (requestBody) => {
+const formatEntry = (requestBody, newDate) => {
     return {
         ...requestBody,
         genres: commaSeparatedToArray(requestBody.genres),
         tags: commaSeparatedToArray(requestBody.tags),
-        dateAdded: Date.now()
+        dateAdded: newDate ? Date.now() : requestBody.dateAdded
     }
 }
 
@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
     try {
         //keeping other form data the same,
         //parse genres/tags into arrays and record dateAdded
-        const newEntry = formatEntry(req.body);
+        const newEntry = formatEntry(req.body, true);
         User.findOne({ '_id' : req.user._id }).then(user => {
             user.list.push(newEntry);
             user.save().then(() => {
@@ -50,7 +50,7 @@ router.post("/", (req, res) => {
 //finds entry based on id from current user's list, updates it
 router.put("/:id", (req, res) => {
     try {
-        const modifiedEntry = formatEntry(req.body);
+        const modifiedEntry = formatEntry(req.body, false);
         User.findOneAndUpdate(
             { '_id' : req.user._id, "list._id" : req.params.id },
             {

@@ -303,7 +303,7 @@ const List = (props) => {
     const openAddEntry = () => setAddEntry(true)
     const closeAddEntry = () => setAddEntry(false)
 
-    const [currentEntry, setCurrentEntry] = useState({});
+    const [currentEntry, setCurrentEntry] = useState(null);
     const [showEditEntry, setEditEntry] = useState(false)
     const openEditEntry = () => setEditEntry(true)
     const closeEditEntry = () => setEditEntry(false)

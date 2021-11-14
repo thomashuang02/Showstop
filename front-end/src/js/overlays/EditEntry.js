@@ -95,7 +95,6 @@ const EditEntry = (props) => {
     const handleEditEntry = async (e) => {
         e.preventDefault();
         if(deleted) {
-            console.log('beans');
             try {
                 const confirm = window.confirm("Delete this entry permanently?");
                 if(confirm) {
@@ -137,8 +136,8 @@ const EditEntry = (props) => {
     }
 
     const formatDate = (date) => {
-        const dateObj = Date(date);
-        return dateObj.slice(4, 10) + "," + dateObj.slice(10, 15);
+        const month = date.slice(5,7), day = date.slice(8,10), year = date.slice(0,4);
+        return `${month}/${day}/${year}`;
     }
 
     return (
@@ -146,7 +145,7 @@ const EditEntry = (props) => {
             <form id="add-entry-form" onSubmit={e=>handleEditEntry(e)} autoComplete="off">
                 <Modal.Header className={darkMode ? "dark-mode" : null}>
                     <Modal.Title>
-                        <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">added {formatDate(dateAdded)}</span>
+                        <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">added {dateAdded ? formatDate(dateAdded): "some time ago"}</span>
                     </Modal.Title>
                     <input type="button" className="button" id="close-overlay-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>

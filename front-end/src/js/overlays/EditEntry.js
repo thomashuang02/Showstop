@@ -145,7 +145,7 @@ const EditEntry = (props) => {
             <form id="add-entry-form" onSubmit={e=>handleEditEntry(e)} autoComplete="off">
                 <Modal.Header className={darkMode ? "dark-mode" : null}>
                     <Modal.Title>
-                        <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">added {dateAdded ? formatDate(dateAdded): "some time ago"}</span>
+                        <strong>Edit Entry</strong>&nbsp;&nbsp;<span id="date-added">last updated {dateAdded ? formatDate(dateAdded): "some time ago"}</span>
                     </Modal.Title>
                     <input type="button" className="button" id="close-overlay-button" onClick={()=>close()} value="&times;"/>
                 </Modal.Header>

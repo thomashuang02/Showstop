@@ -12,7 +12,7 @@ const session = require('express-session');
 const app = express();
 
 /* ------------------------------- middleware ------------------------------- */
-app.use(morgan("dev"))
+//app.use(morgan("dev"))
 const buildPath = path.join(__dirname, '../front-end/build');
 app.use(express.static(buildPath));
 app.use(express.json());
@@ -54,3 +54,5 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}.`)
 });
+
+module.exports = app;

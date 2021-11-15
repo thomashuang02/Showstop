@@ -4,7 +4,7 @@
   "description": "Showstop!",
   "main": "./src/app.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "coverage": "nyc npm run test",
     "start": "node ./src/app.js",
     "heroku-postbuild": "cd front-end && npm install && npm run build"

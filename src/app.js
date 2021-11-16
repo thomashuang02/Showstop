@@ -12,7 +12,7 @@ const session = require('express-session');
 const app = express();
 
 /* ------------------------------- middleware ------------------------------- */
-//app.use(morgan("dev"))
+//app.use(morgan("dev"));
 const buildPath = path.join(__dirname, '../front-end/build');
 app.use(express.static(buildPath));
 app.use(express.json());
@@ -32,17 +32,15 @@ app.use(passport.session());
 require('./passportConfig')(passport);
 
 /* ------------------------- connecting to database ------------------------- */
-// const User = require('./models/UserAndEntry').User;
-// const Entry = require('./models/UserAndEntry').Entry;
 connection();
 
 /* -------------------------- authentication routes ------------------------- */
-const authenticationRoutes = require('./routes/authenticationRoutes');
-app.use("/api", authenticationRoutes);
+const authenticationRouter = require('./routes/authenticationRoutes').router;
+app.use("/api", authenticationRouter);
 
 /* --------------------------- list action routes --------------------------- */
-const listRoutes = require('./routes/listRoutes');
-app.use("/api/list", listRoutes);
+const listRouter = require('./routes/listRoutes').router;
+app.use("/api/list", listRouter);
 
 /* ------------------------ default: send index.html ------------------------ */
 app.get('*', (req, res) => {

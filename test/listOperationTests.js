@@ -1,95 +1,58 @@
+const { expect } = require("chai");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../src/app");
-
-//assertion style
-chai.should();
 chai.use(chaiHttp);
+const agent = chai.request.agent(app);
+const assert = require('assert');
+const faker = require('faker');
 
-describe('List Operations API', () => {
-    // //test post login route
-    // describe("POST /login", () => {
-    //     it("Should successfully post to database and receive JSON", (done) => {
-    //         chai.request(app)
-    //             .post("/login")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.should.have.status(200);
-    //                 response.should.to.be.json;
-    //             });
-    //         done();
-    //     });
-    //     it("Response body should have user properties username, avatar, joined_since, games_played, games_won, and success", (done) => {
-    //         chai.request(app)
-    //             .post("/login")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.body.should.have.keys([
-    //                     'username','avatar','joined_since','games_played','games_won','success'
-    //                 ]);
-    //             });
-    //         done();
-    //     });
-    // });
+const listRoutesExports = require('../src/routes/listRoutes');
+const [commaSeparatedToArray, formatEntry] = [listRoutesExports.commaSeparatedToArray, listRoutesExports.formatEntry];
 
-    // //test post signUp route
-    // describe("POST /signUp", () => {
-    //     it("Should successfully post to database and receive JSON", (done) => {
-    //         chai.request(app)
-    //             .post("/signUp")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.should.have.status(200);
-    //                 response.should.to.be.json;
-    //             });
-    //         done();
-    //     });
-    //     it("Response body should have user properties username, avatar, joined_since, games_played, games_won, and success", (done) => {
-    //         chai.request(app)
-    //             .post("/signUp")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.body.should.have.keys([
-    //                     'username','avatar','joined_since','games_played','games_won','success'
-    //                 ]);
-    //             });
-    //         done();
-    //     });
-    // });
+describe('List operations API', () => {
+    //helper function unit tests
+    describe("Helper function unit tests", () => {
+        it("commaSeparatedToArray() should format all comma-separated strings into nonempty array elements", () => {
+            expect(commaSeparatedToArray("")).to.eql([]);
+            expect(commaSeparatedToArray("hello")).to.eql(["hello"]);
+            expect(commaSeparatedToArray(",,,hello,,,")).to.eql(["hello"]);
+            expect(commaSeparatedToArray("hello,goodbye,")).to.eql(["hello","goodbye"]);
+            expect(commaSeparatedToArray(",hello,    goodbye   ")).to.eql(["hello","goodbye"]);
+            expect(commaSeparatedToArray("abc12, 3#$%, 汉字")).to.eql(["abc12","3#$%","汉字"]);
+        });
+        it("formatEntry() should array-ify genres/tags, add/update date added, and preserve all other properties", () => {
+            const entry = {
+                title: faker.name.title(),
+                rating: faker.datatype.number(),
+                status: faker.lorem.word(),
+                episodesCompleted: faker.datatype.number(),
+                episodesTotal: faker.datatype.number(),
+                favorite: faker.datatype.boolean(),
+                type: faker.lorem.word(),
+                genres: (faker.lorem.word()+",").repeat(2),
+                tags: (faker.lorem.word()+",").repeat(6),
+                notes: faker.lorem.sentence()
+            }
+            const formattedEntry = formatEntry(entry);
+            assert.equal(formattedEntry.title, entry.title);
+            assert.equal(formattedEntry.rating, entry.rating);
+            assert.equal(formattedEntry.status, entry.status);
+            assert.equal(formattedEntry.episodesCompleted, entry.episodesCompleted);
+            assert.equal(formattedEntry.episodesTotal, entry.episodesTotal);
+            assert.equal(formattedEntry.favorite, entry.favorite);
+            assert.equal(formattedEntry.type, entry.type);
+            chai.assert.typeOf(formattedEntry.genres, 'array');
+            chai.assert.typeOf(formattedEntry.tags, 'array');
+            assert.equal(formattedEntry.notes, entry.notes);
+            formattedEntry.should.include.keys("dateAdded");
+        });
+    });
 
-    // //test get user route
-    // describe("GET /user", () => {
-    //     it("Should respond with status 200", (done) => {
-    //         chai.request(app)
-    //             .get("/user")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.should.have.status(200);
-    //             });
-    //         done();
-    //     });
-    //     it("Response body should empty object, as there is not yet database integration", (done) => {
-    //         chai.request(app)
-    //             .get("/user")
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.body.should.satisfy(obj => Object.keys(obj).length === 0);
-    //             });
-    //         done();
-    //     });
-    // });
-
-    // //test logout route
-    // describe("GET /logout", () => {
-    //     it("Should logout (not yet implemented) and redirect successfully to home page", (done) => {
-    //         chai.request(app)
-    //             .get("/logout")
-    //             .redirects(0)
-    //             .end((err, response) => {
-    //                 if (err) throw err;
-    //                 response.should.have.status(302);
-    //             });
-    //         done();
-    //     });
-    // });
+    //test get list route
+    describe("Unsure of how to write integration tests with chai-http that can access req.session...", () => {
+        it("on which all my list operations depend.", () => {
+            expect(1).to.equal(1);
+        });
+    });
 });

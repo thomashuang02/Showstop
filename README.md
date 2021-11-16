@@ -148,24 +148,44 @@ module.exports = mongoose.model('User', UserSchema);
   * currently apparent in the [login/registration forms](./front-end/src/js/Login.js?raw=true) and some of the [add-entry form](./front-end/src/js/overlays/AddEntry.js?raw=true).
 * (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. 
   * All screens and interfaces in the front-end directory are written in JSX.
-* (3 points) Unit testing of backend routes with JavaScript using Mocha and Chai, as well as Istanbul for tracking code coverage. 
-  * yet to do.
+* (3 points) Unit/integration testing of backend routes with JavaScript using Mocha and Chai/[chai-http](https://www.chaijs.com/plugins/chai-http/), as well as [Istanbul](https://github.com/istanbuljs/nyc) for tracking code coverage. 
+  * Integration tests for authentication routes done in [authenticationTests.js](./test/authenticationTests.js?raw=true).
+  * Some unit tests for helper functions of list routes done in [listOperationTests.js](./test/listOperationTests.js?raw=true).
+  * Code coverage: 
+    ```
+    --------------------------|---------|----------|---------|---------|-------------------------
+    File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s       
+    --------------------------|---------|----------|---------|---------|-------------------------   
+    All files                 |   73.57 |    65.38 |   66.66 |   75.57 |                            
+     src                      |   92.98 |       80 |   83.33 |   96.29 |                            
+      app.js                  |   96.66 |      100 |      50 |   96.66 | 47                         
+      dbConnection.js         |   83.33 |      100 |   66.66 |   83.33 | 11                         
+      passportConfig.js       |   90.47 |       75 |     100 |     100 | 9,12                       
+     src/models               |     100 |      100 |     100 |     100 |                            
+      User.js                 |     100 |      100 |     100 |     100 |                            
+     src/routes               |   58.22 |    56.25 |   57.14 |    58.9 |                            
+      authenticationRoutes.js |   91.42 |       75 |     100 |     100 | 12,16,30                   
+      listRoutes.js           |   31.81 |        0 |   30.76 |   28.57 | 22-28,34-46,52-72,77-96    
+    --------------------------|---------|----------|---------|---------|-------------------------
+    ```
 * (1 point) [react-select](https://react-select.com/home) for better-customizable select inputs on the front-end.
   * configuration at line 39 of [List.js](./front-end/src/js/List.js?raw=true), usage at line 317.
 * (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
   * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
-* (1 point) [cookie-parser](https://www.npmjs.com/package/cookie-parser) as a server-side Javascript module for ease of managing cookies, particularly for stuff like dark-mode.
+* (1 point) [cookie-parser](https://www.npmjs.com/package/cookie-parser) and [react-cookie](https://www.npmjs.com/package/react-cookie) as server-side Javascript modules for ease of managing cookies, particularly for stuff like dark-mode.
   * cookies read in [App.js](./front-end/src/js/App.js?raw=true) and [Login.js](./front-end/src/js/Login.js?raw=true), read and written in [List.js](./front-end/src/js/List.js?raw=true)
 * (1 point) [passport](https://www.npmjs.com/package/passport) and [passport-local](http://www.passportjs.org/packages/passport-local/) as a server-side Javascript module for authentication a nd specifying a local strategy for it.
   * config in [passportConfig.js](./src/passportConfig.js?raw=true), authentication utilized in [authenticationRoutes.js](./src/routes/authenticationRoutes.js?raw=true)
 * (1 point) [axios](https://www.npmjs.com/package/axios) for promise-based HTTP requests on both the front- and back-end.
   * used at various points in the front-end to make requests to back-end, which uses it also to proxy those requests to MongoDB Atlas. 
 * (1 point) Responsive design.
-  * Both login and list pages adapt to changes in screen width, try messing around.
+  * Both login and list pages adapt to changes in screen width, try messing around. Apparently my screen-width media queries are a little more temperamental on MacOS, but it's nothing app-breaking and I don't have a Mac to debug, so *shrug*.
+* (1 point) [faker](https://faker.readthedocs.io/en/master/) for generating some fake data for unit/integration testing.
+  * used in [listOperationTests.js](./test/listOperationTests.js?raw=true).
 * (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
   * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
-16 points total out of 8 required points.
+17 points total out of 8 required points.
 
 
 ## [Initial Main Project File](./src/app.js?raw=true) 
@@ -201,6 +221,6 @@ app.listen(3000);
 1. [tutorial for passport config and authentication](https://www.youtube.com/watch?v=IUw_TgRhTBE) - [passportConfig.js](./src/passportConfig.js?raw=true), [authenticationRoutes.js](./src/routes/authenticationRoutes.js?raw=true)
 2. [css grid vs flexbox tutorial](https://www.youtube.com/watch?v=9zA8cB-54SA&t=198s) - [AddEntry.js](./front-end/src/js/overlays/AddEntry.js?raw=true)
 3. [Bootstrap <Modal> documentation](https://react-bootstrap.github.io/components/modal/) - [AddEntry.js](./front-end/src/js/overlays/AddEntry.js?raw=true)
-4. [react-cookie documentation](https://www.npmjs.com/package/react-cookie) - [App.js](./front-end/src/js/App.js?raw=true)
-5. [MERN-stack todo list app tutorial](https://dev.to/jahangeer/how-to-build-a-todo-list-app-with-react-node-js-mern-stack-3ban) - inspiration for file structure of backend routing and list-modifying functions
-6. [Typewriter text effect](https://usefulangle.com/post/85/css-typewriter-animation) - [Typewriter.js](./front-end/src/js/Typewriter.js?raw=true)
+4. [MERN-stack todo list app tutorial](https://dev.to/jahangeer/how-to-build-a-todo-list-app-with-react-node-js-mern-stack-3ban) - inspiration for file structure of backend routing and list-modifying functions
+5. [Typewriter text effect](https://usefulangle.com/post/85/css-typewriter-animation) - [Typewriter.js](./front-end/src/js/Typewriter.js?raw=true)
+6. I also consulted documentation concerning all my research topics, listed above.

@@ -1,5 +1,3 @@
-
-
 # Showstop
 
 ## Overview
@@ -9,8 +7,6 @@ Most of us consume media recreationally, but it seems like the more we consume i
 Showstop aims to be a simple web application that helps its user keep track of the answers to all those questions, helping them develop a collection of their past, present, and future media consumption. Now we can at least document the time we've ~~wasted~~ invested!
 
 Users will be able to create accounts in the system, where their personal records are stored in an entry per piece of media (containing information on that media as well as the user's ratings). Users can login and create, view, manipulate, and delete entries, and (hopefully) search, filter, and sort their list based on various criteria.
-
-(This is loosely a MyAnimeList clone.)
 
 
 ## Data Model
@@ -113,25 +109,25 @@ module.exports = mongoose.model('User', UserSchema);
 
 /login - page for login or sign-up
 
-![login](./ux-design/wireframes/wireframe-login.png?raw=true)
-![sign up overlay](./ux-design/wireframes/wireframe-sign-up.png?raw=true)
+![login](./documentation/wireframes/wireframe-login.png?raw=true)
+![sign up overlay](./documentation/wireframes/wireframe-sign-up.png?raw=true)
 
 /list - page for displaying and manipulating list (done through overlays, not through new pages)
 
-![list](./ux-design/wireframes/wireframe-list.png?raw=true)
+![list](./documentation/wireframes/wireframe-list.png?raw=true)
 
 - Users can click on any entry to view its details. Rating, status, and progress can be edited here. Users can also further edit or delete an entry from this overlay.
-![view entry overlay](./ux-design/wireframes/wireframe-view-entry.png?raw=true)
+![view entry overlay](./documentation/wireframes/wireframe-view-entry.png?raw=true)
 
 - Users can add/edit an entry either by clicking "Add Entry" on the top left of the list, or by clicking "Edit" when viewing an entry.
-![add entry overlay](./ux-design/wireframes/wireframe-add-entry.png?raw=true)
+![add entry overlay](./documentation/wireframes/wireframe-add-entry.png?raw=true)
 
 - Users can search and filter the list by various criteria.
-![search overlay](./ux-design/wireframes/wireframe-search.png?raw=true)
+![search overlay](./documentation/wireframes/wireframe-search.png?raw=true)
 
 ## Site map
 
-![site map](./ux-design/site-map.png?raw=true)
+![site map](./documentation/site-map.png?raw=true)
 
 ## User Stories or Use Cases
 
@@ -145,9 +141,8 @@ module.exports = mongoose.model('User', UserSchema);
 ## Research Topics
 
 * (3 points) Perform client side form validation using custom JavaScript.
-  * currently apparent in the [login/registration forms](./front-end/src/js/Login.js?raw=true) and some of the [add-entry form](./front-end/src/js/overlays/AddEntry.js?raw=true).
-* (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS. 
-  * All screens and interfaces in the front-end directory are written in JSX.
+  * apparent in the [login/registration forms](./front-end/src/js/Login.js?raw=true) and some of the [add-entry form](./front-end/src/js/overlays/AddEntry.js?raw=true).
+* (3 points) [React.js](https://reactjs.org/) as a client-side JavaScript framework for generating dynamic HTML and CSS.
 * (3 points) Unit/integration testing of backend routes with JavaScript using Mocha and Chai/[chai-http](https://www.chaijs.com/plugins/chai-http/), as well as [Istanbul](https://github.com/istanbuljs/nyc) for tracking code coverage. 
   * Integration tests for authentication routes done in [authenticationTests.js](./test/authenticationTests.js?raw=true).
   * Some unit tests for helper functions of list routes done in [listOperationTests.js](./test/listOperationTests.js?raw=true).
@@ -171,7 +166,7 @@ module.exports = mongoose.model('User', UserSchema);
 * (1 point) [react-select](https://react-select.com/home) for better-customizable select inputs on the front-end.
   * configuration at line 39 of [List.js](./front-end/src/js/List.js?raw=true), usage at line 317.
 * (1 point) [Morgan](https://github.com/expressjs/morgan) as a server-side Javascript module, using its middleware for logging information about incoming server requests.
-  * This is going to make debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
+  * This makes debugging my server a fair bit easier. Used in [app.js](./src/app.js?raw=true)
 * (1 point) [cookie-parser](https://www.npmjs.com/package/cookie-parser) and [react-cookie](https://www.npmjs.com/package/react-cookie) as server-side Javascript modules for ease of managing cookies, particularly for stuff like dark-mode.
   * cookies read in [App.js](./front-end/src/js/App.js?raw=true) and [Login.js](./front-end/src/js/Login.js?raw=true), read and written in [List.js](./front-end/src/js/List.js?raw=true)
 * (1 point) [passport](https://www.npmjs.com/package/passport) and [passport-local](http://www.passportjs.org/packages/passport-local/) as a server-side Javascript module for authentication a nd specifying a local strategy for it.
@@ -179,13 +174,11 @@ module.exports = mongoose.model('User', UserSchema);
 * (1 point) [axios](https://www.npmjs.com/package/axios) for promise-based HTTP requests on both the front- and back-end.
   * used at various points in the front-end to make requests to back-end, which uses it also to proxy those requests to MongoDB Atlas. 
 * (1 point) Responsive design.
-  * Both login and list pages adapt to changes in screen width, try messing around. Apparently my screen-width media queries are a little more temperamental on MacOS, but it's nothing app-breaking and I don't have a Mac to debug, so *shrug*.
-* (1 point) [faker](https://faker.readthedocs.io/en/master/) for generating some fake data for unit/integration testing.
+  * Both login and list pages adapt to changes in screen width, try messing around. Apparently my screen-width media queries are a little more temperamental on MacOS, but it's nothing app-breaking and I don't own a Mac for debugging, so *shrug*.
+* (1 point) [faker](https://faker.readthedocs.io/en/master/) for generating some mock data for unit/integration testing.
   * used in [listOperationTests.js](./test/listOperationTests.js?raw=true).
-* (1 point) *Possibly* [Movie Database (IMDb Alternative)](https://rapidapi.com/rapidapi/api/movie-database-imdb-alternative) as an external API to grab IMDb ratings for an entry.
-  * This will not be a priority until everything else is functional, but I'd like the user to have the option to see what other people thought about a piece of a media.
 
-17 points total out of 8 required points.
+16 points total out of 8 required points.
 
 
 ## [Initial Main Project File](./src/app.js?raw=true) 
